@@ -1,10 +1,13 @@
+import Header from "../Header/Header";
 import Promo from "../Promo/Promo";
 
 export default function Main() {
   return (
-    // <Header> </Header>
-    <main>
-      <Promo />
-    </main>
+    <>
+      <Header />
+      <main>
+        <Promo />
+      </main>
+    </>
   );
 }

@@ -1,0 +1,42 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px 14px;
+  background-color: #dddee3;
+}
+
+.header__link-register {
+  margin-right: 14px;
+}
+
+@media (min-width: 425px) {
+  .header {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .header__link-register {
+    margin-right: 22px;
+  }
+}
+
+@media (min-width: 768px) {
+  .header {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .header__link-register {
+    margin-right: 30px;
+  }
+}
+
+
+@media (min-width: 1280px) {
+  .header {
+    padding-left: 70px;
+    padding-right: 70px;
+  }
+}

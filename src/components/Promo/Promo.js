@@ -3,7 +3,7 @@ import './Promo.css';
 
 export default function Promo() {
   return (
-    <section className='promo'>
+    <section className='promo' id='123'>
       <div className='promo__container'>
         <div>
           <h1 className='promo__title'>
@@ -15,7 +15,14 @@ export default function Promo() {
         </div>
         <img className='promo__image' src={promoLogo} alt='Земной шар'></img>
       </div>
-      <a className='promo__link' href='https://practicum.yandex.ru/web' target='_blank'>Узнать больше</a>
+      <a
+        className='promo__link'
+        href='https://practicum.yandex.ru/web'
+        target='_blank'
+        rel='noreferrer'
+      >
+        Узнать больше
+      </a>
     </section>
   );
 }
