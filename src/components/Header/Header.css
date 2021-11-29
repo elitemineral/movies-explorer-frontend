@@ -7,6 +7,10 @@
   background-color: #dddee3;
 }
 
+.header_theme-white {
+  background-color: #fff;
+}
+
 .header__link-register {
   margin-right: 14px;
 }

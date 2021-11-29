@@ -1,16 +1,14 @@
-import Link from '../Link/Link';
-import headerLogo from '../../images/heaer-logo.svg';
-import Button from '../Button/Button';
+import headerLogo from '../../images/header-logo.svg';
+import HeaderNav from '../HeaderNav/HeaderNav';
 import './Header.css';
 
-export default function Header() {
+export default function Header(props) {
+  const { loggedIn = true } = props;
+
   return (
-    <header className='header'>
+    <header className={`header${loggedIn ? ' header_theme-white' : ''}`}>
       <img className='header__logo' src={headerLogo} alt='Логотип' />
-      <nav className='header__nav'>
-        <Link className='header__link-register' path='' text='Регистрация' />
-        <Button className='header__button-login' text='Войти' />
-      </nav>
+      <HeaderNav />
     </header>
   );
 }

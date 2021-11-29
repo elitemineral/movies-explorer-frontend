@@ -3,7 +3,7 @@ import './Promo.css';
 
 export default function Promo() {
   return (
-    <section className='promo' id='123'>
+    <section className='promo'>
       <div className='promo__container'>
         <div>
           <h1 className='promo__title'>
