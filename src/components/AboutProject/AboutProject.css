@@ -1,0 +1,190 @@
+.about {
+  padding: 70px 18px;
+}
+
+.about__title {
+  padding-bottom: 28px;
+  margin: 0 0 60px 0;
+
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 400;
+
+  border-bottom: 1px solid #000;
+
+  letter-spacing: -0.04em
+}
+
+.about__items {
+  display: flex;
+  flex-direction: column;
+  gap: 55px;
+
+  padding: 0;
+  margin: 0 0 60px 0;
+
+  list-style-type: none;
+}
+
+.about__item-heading {
+  margin: 0 0 16px 0;
+
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 400;
+
+  letter-spacing: -0.04em;
+}
+
+.about__item-decription {
+  margin: 0;
+
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.about__weeks {
+  width: 100%;
+  display: flex;
+
+  padding: 0;
+  margin: 0;
+
+  list-style-type: none;
+}
+
+.about__week {
+  text-align: center;
+  min-width: 100px;
+}
+
+.about__week_extended {
+  flex-grow: 1;
+}
+
+.about__week-heading {
+  padding: 11px 10px;
+  margin: 0 0 10px 0;
+
+  font-size: 11px;
+  line-height: 13px;
+  font-weight: 400;
+
+  color: #fff;
+  background-color: #3456f3;
+}
+
+.about__week-heading_theme-light {
+  color: #000;
+  background-color: #f2f2f2;
+}
+
+.about__week-decription {
+  margin: 0;
+
+  color: #a0a0a0;
+  font-size: 11px;
+  line-height: 13px;
+}
+
+@media (min-width: 425px) {
+  .about {
+    padding: 80px 25px;
+  }
+
+  .about__title {
+    padding-bottom: 23px;
+    margin-bottom: 65px;
+
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .about__items {
+    gap: 60px;
+    margin-bottom: 76px;
+  }
+
+  .about__item-heading {
+    font-size: 19px;
+    line-height: 23px;
+  }
+
+  .about__week {
+    min-width: 120px;
+  }
+}
+
+@media (min-width: 768px) {
+  .about {
+    padding: 90px 50px;
+  }
+
+  .about__title {
+    padding-bottom: 23px;
+    margin-bottom: 70px;
+
+    font-size: 22px;
+    line-height: 27px;
+  }
+
+  .about__items {
+    flex-direction: row;
+    gap: 35px;
+    margin-bottom: 91px;
+  }
+
+  .about__item-heading {
+    margin-bottom: 22px;
+
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .about__item-decription {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .about__week {
+    min-width: 140px;
+  }
+
+  .about__week-heading {
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+  .about__week-decription {
+    font-size: 14px;
+    line-height: 17px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .about {
+    padding: 110px 70px;
+  }
+
+  .about__items {
+    margin-bottom: 110px;
+    gap: 55px;
+  }
+
+  .about__item-heading {
+    margin-bottom: 25px;
+  }
+
+  .about__item-decription {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .about__week {
+    min-width: 228px;
+  }
+
+  .about__week-decription {
+    font-weight: 500;
+  }
+}
