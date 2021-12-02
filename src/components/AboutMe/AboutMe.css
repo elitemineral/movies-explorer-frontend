@@ -1,0 +1,51 @@
+.about-me {
+  padding: 70px 18px;
+}
+
+.section__title {
+  padding-bottom: 28px;
+  margin: 0;
+
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 400;
+
+  border-bottom: 1px solid #000;
+
+  letter-spacing: -0.04em
+}
+
+
+@media (min-width: 425px) {
+  .about-me {
+    padding: 80px 25px 0;
+  }
+
+  .section__title {
+    padding-bottom: 23px;
+
+    font-size: 20px;
+    line-height: 24px;
+  }
+}
+
+@media (min-width: 768px) {
+  .about-me {
+    padding: 90px 50px;
+  }
+
+  .section__title {
+    padding-bottom: 23px;
+
+    font-size: 22px;
+    line-height: 27px;
+  }
+
+}
+
+@media (min-width: 1280px) {
+  .about-me {
+    padding: 110px 70px;
+  }
+
+}
