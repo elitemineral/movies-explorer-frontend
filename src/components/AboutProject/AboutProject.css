@@ -122,8 +122,6 @@
   }
 
   .section__title {
-    padding-bottom: 23px;
-
     font-size: 22px;
     line-height: 27px;
   }
@@ -132,7 +130,7 @@
     flex-direction: row;
     gap: 35px;
     margin-top: 70px;
-    margin-bottom: 91px;
+    margin-bottom: 93px;
   }
 
   .about__item-heading {
@@ -152,6 +150,8 @@
   }
 
   .about__week-heading {
+    padding-top: 8px;
+    margin-bottom: 11px;
     font-size: 14px;
     line-height: 17px;
   }
@@ -187,6 +187,10 @@
 
   .about__week {
     min-width: 228px;
+  }
+
+  .about__week-heading {
+    padding-top: 9px;
   }
 
   .about__week-decription {

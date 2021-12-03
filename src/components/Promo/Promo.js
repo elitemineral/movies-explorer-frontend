@@ -16,10 +16,8 @@ export default function Promo() {
         <img className='promo__image' src={promoLogo} alt='Земной шар'></img>
       </div>
       <a
-        className='promo__link'
-        href='https://practicum.yandex.ru/web'
-        target='_blank'
-        rel='noreferrer'
+        className='link promo__link'
+        href='#about-project'
       >
         Узнать больше
       </a>
