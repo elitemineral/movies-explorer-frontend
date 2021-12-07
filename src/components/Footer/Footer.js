@@ -7,18 +7,18 @@ export default function Footer() {
         Учебный проект Яндекс.Практикум х BeatFilm.
       </h3>
       <div className='footer_container'>
-        <nav class='footer__links'>
-          <a class='link footer__link' href='https://practicum.yandex.ru' target='_blank' rel='noreferrer'>
+        <nav className='footer__links'>
+          <a className='link footer__link' href='https://practicum.yandex.ru' target='_blank' rel='noreferrer'>
             Яндекс.Практикум
           </a>
-          <a class='link footer__link' href='https://github.com' target='_blank' rel='noreferrer'>
+          <a className='link footer__link' href='https://github.com' target='_blank' rel='noreferrer'>
             Github
           </a>
-          <a class='link footer__link' href='https://facebook.com' target='_blank' rel='noreferrer'>
+          <a className='link footer__link' href='https://facebook.com' target='_blank' rel='noreferrer'>
             Facebook
           </a>
         </nav>
-        <p class='footer__copyright'>&copy; 2021</p>
+        <p className='footer__copyright'>&copy; 2021</p>
       </div>
     </footer>
   );

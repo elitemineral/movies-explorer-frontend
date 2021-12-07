@@ -15,7 +15,7 @@ export default function Header() {
   }
 
   return (
-    <header className={`header${loggedIn ? ' header_theme-white' : ''}`}>
+    <header className={`header${loggedIn ? ' header_theme-light' : ''}`}>
       <img className='header__logo' src={headerLogo} alt='Логотип' onClick={nandleLogoClick} />
       <nav className='header__menu'>
         {loggedIn ?

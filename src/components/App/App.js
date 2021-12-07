@@ -6,7 +6,7 @@ import { useState } from 'react';
 import Movies from '../Movies/Movies.js';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
 
   return (
     <CurrentUserContext.Provider value={{ loggedIn }}>

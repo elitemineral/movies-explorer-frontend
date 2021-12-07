@@ -50,8 +50,10 @@ export default function HeaderMenu() {
         <li className='header__menu-item'>
           <NavLink className={getMenuLinkClassName} to={appRoutes.savedMovies}>Сохранённые фильмы</NavLink>
         </li>
-        <li className='header__menu-item header__menu-item_position-bottom'>
-          <NavLink className={getMenuLinkClassName} to={appRoutes.profile}>Аккаунт</NavLink>
+        <li className='header__menu-item header__menu-item_position-last'>
+          <NavLink className={getMenuLinkClassName} to={appRoutes.profile}>
+            <span className='link header__menu-profile-icon'>Аккаунт</span>
+          </NavLink>
         </li>
       </ul>
     );
