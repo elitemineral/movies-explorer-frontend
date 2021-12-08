@@ -4,7 +4,7 @@
   justify-content: center;
   align-self: center;
   width: 22px;
-  height: 20.5px;
+  height: 21px;
   position: relative;
   cursor: pointer;
 
@@ -16,7 +16,7 @@
   content: '';
   position: absolute;
   width: 100%;
-  height: 2.5px;
+  height: 3px;
   background-color: #000;
   transition: transform .2s linear;
   left: 0;
@@ -47,11 +47,18 @@
 
 .burger-item {
   width: 100%;
-  height: 2.5px;
+  height: 3px;
   background-color: #000;
   transition: transform .2s linear;
 }
 
 .burger-item_active {
   transform: scale(0);
+}
+
+@media (min-width: 768px) {
+  .burger {
+    height: 23px;
+    width: 28px;
+  }
 }

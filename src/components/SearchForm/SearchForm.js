@@ -10,7 +10,7 @@ export default function SearchForm() {
           <button className='button form__button-submit' type='submit'>Найти</button>
         </fieldset>
         <label className='search-form__switcher-label'>
-          <input className='search-form__switcher' name='short-movie' type='checkbox' />
+          <input className='search-form__switcher' name='short-movie' type='checkbox' defaultChecked />
           Короткометражки
         </label>
       </form>

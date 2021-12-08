@@ -1,5 +1,5 @@
 .search {
-  padding: 98px 14px 51px;
+  padding: 93px 14px 51px;
   background-color: #fafafa;
 }
 
@@ -43,10 +43,13 @@
   line-height: 18px;
 
   width: 59px;
-  padding: 6px 0;
+  height: 34px;
   margin-left: 15px;
   border-radius: 48px;
   flex-shrink: 0;
+
+  background-color: #3456f3;
+  color: #fff;
 }
 
 .search-form__switcher-label {
@@ -125,7 +128,7 @@
 
 @media (min-width: 768px) {
   .search {
-    padding: 86px 30px 61px;
+    padding: 74px 30px 61px;
   }
 
   .search-form__container {
@@ -139,6 +142,7 @@
 
     display: block;
     width: 34px;
+    margin-left: 6px;
     box-sizing: border-box;
     flex-shrink: 0;
   }
@@ -177,6 +181,10 @@
 
 @media (min-width: 1280px) {
   .search {
-    padding: 70px 70px 50px;
+    padding: 58px 70px 50px;
+  }
+
+  .search-form__loupe {
+    margin-left: 6px;
   }
 }
