@@ -61,4 +61,9 @@
     height: 23px;
     width: 28px;
   }
+
+  .burger_opened {
+    height: 3px;
+    z-index: 2;
+  }
 }

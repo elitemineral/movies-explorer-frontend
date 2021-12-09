@@ -22,7 +22,6 @@
 
 .link {
   text-decoration: none;
-  color: #000;
   transition: opacity linear .3s;
 }
 
@@ -38,4 +37,9 @@
 
 .button:hover {
   opacity: 0.8;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
 }

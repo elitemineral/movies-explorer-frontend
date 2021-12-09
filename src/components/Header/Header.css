@@ -11,8 +11,17 @@
   background-color: #fafafa;
 }
 
+.header__menu {
+  display: flex;
+  align-items: center;
+}
+
 .header__logo {
   cursor: pointer;
+}
+
+.header__logo_offset {
+  margin: 100px auto 0;
 }
 
 .header__link-register {
@@ -22,12 +31,18 @@
 
   margin-right: 14px;
   border-radius: 3px;
+    color: #000;
 }
 
 .header__button-login {
   width: 54px;
   height: 26px;
   padding: 0;
+  text-decoration: none;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   font-size: 10px;
   line-height: 16px;
@@ -35,6 +50,13 @@
 
   background-color: #3456f3;
   color: #fff;
+  border-radius: 3px;
+
+  transition: opacity linear .3s;
+}
+
+.header__button-login:hover {
+  opacity: 0.8;
 }
 
 @media (min-width: 425px) {
@@ -59,6 +81,10 @@
     padding: 25px 38px 30px 30px;
   }
 
+  .header__logo_offset {
+    margin: 115px 0 0 156px;
+  }
+
   .header__link-register {
     font-size: 12px;
     margin-right: 30px;
@@ -75,5 +101,9 @@
   .header {
     padding-left: 70px;
     padding-right: 70px;
+  }
+
+  .header__logo_offset {
+    margin: 115px 0 0 372px;
   }
 }

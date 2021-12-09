@@ -3,11 +3,6 @@
   background-color: #fafafa;
 }
 
-.search-form {
-  display: flex;
-  flex-direction: column;
-}
-
 .search-form__container {
   display: flex;
   gap: 6px;
@@ -44,6 +39,7 @@
 
   width: 59px;
   height: 34px;
+  padding: 0;
   margin-left: 15px;
   border-radius: 48px;
   flex-shrink: 0;

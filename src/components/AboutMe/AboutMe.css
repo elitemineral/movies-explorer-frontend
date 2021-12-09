@@ -67,10 +67,10 @@
 .about-me__social-link {
   text-decoration: none;
 
-  color: #000;
   font-weight: 500;
   font-size: 14px;
   line-height: 17px;
+  color: #000;
 }
 
 .about-me__portfolio {

@@ -17,16 +17,22 @@ export default function Header() {
 
   return (
     <header className={`header${location.pathname !== appRoutes.root ? ' header_theme-light' : ''}`}>
-      <img className='header__logo' src={headerLogo} alt='Логотип' onClick={handleLogoClick} />
-      <nav className='header__menu'>
-        {loggedIn ?
-          <HeaderMenu /> :
-          <>
-            <Link className='link header__link-register' to=''>Регистрация</Link>
-            <button className='button header__button-login'>Войти</button>
-          </>
-        }
-      </nav>
+      <img className={`header__logo
+        ${(location.pathname === appRoutes.signIn || location.pathname === appRoutes.signUp || location.pathname === appRoutes.profile) ? ' header__logo_offset' : ''}`}
+        src={headerLogo} alt='Логотип'
+        onClick={handleLogoClick}
+      />
+      {!(location.pathname === appRoutes.signIn || location.pathname === appRoutes.signUp) && (
+        <nav className='header__menu'>
+          {loggedIn ?
+            <HeaderMenu /> :
+            <>
+              <Link className='link header__link-register' to={appRoutes.signUp}>Регистрация</Link>
+              <Link className='header__button-login' to={appRoutes.signIn}>Войти</Link>
+            </>
+          }
+        </nav>
+      )}
     </header>
   );
 }
