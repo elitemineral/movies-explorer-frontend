@@ -3,11 +3,11 @@
   flex-direction: column;
   align-items: center;
   background-color: #fafafa;
+  height: calc(100vh - 112px);
 }
 
 .form-login {
   width: 260px;
-  margin: auto;
   gap: 20px;
 }
 
@@ -36,6 +36,10 @@
 }
 
 @media (min-width: 768px) {
+  .login {
+    height: calc(100vh - 300px);
+  }
+
   .form-login {
     width: 396px;
   }
@@ -57,5 +61,11 @@
 
   .form__button-auth_offset {
     margin-top: 159px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .login {
+    height: calc(100vh - 138px);
   }
 }

@@ -5,7 +5,7 @@ export default function Popup(props) {
   const {
     isOpen,
     children,
-    onClose,
+    onClose = () => {},
     containerClassName,
   } = props;
 

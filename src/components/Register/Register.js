@@ -27,7 +27,7 @@ export default function Register() {
                 // onChange={() => {}}
                 required
               />
-              <span className='form__input-error'>Что-то пошло не так...</span>
+              <span className='form__input-error form__input-error_visible'>Что-то пошло не так...</span>
             </label>
             <label className='form__label-auth'>
               E-mail
@@ -39,7 +39,7 @@ export default function Register() {
                 // onChange={() => {}}
                 required
               />
-              <span className='form__input-error'>Что-то пошло не так...</span>
+              <span className='form__input-error form__input-error_visible'>Что-то пошло не так...</span>
             </label>
             <label className='form__label-auth'>
               Пароль

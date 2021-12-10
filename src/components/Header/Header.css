@@ -9,6 +9,14 @@
   background-color: #dddee3;
 }
 
+.header_stretched {
+  justify-content: center;
+  align-items: flex-end;
+  box-sizing: border-box;
+  min-height: 112px;
+  padding-right: 14px;
+}
+
 .header_theme-light {
   background-color: #fafafa;
 }
@@ -22,10 +30,6 @@
   cursor: pointer;
 }
 
-.header__logo_offset {
-  margin: 100px auto 0;
-}
-
 .header__link-register {
   font-size: 10px;
   line-height: 16px;
@@ -33,7 +37,7 @@
 
   margin-right: 14px;
   border-radius: 3px;
-    color: #000;
+  color: #000;
 }
 
 .header__button-login {
@@ -62,10 +66,6 @@
 }
 
 @media (min-width: 425px) {
-  .header {
-    padding: 22px;
-  }
-
   .header__link-register {
     font-size: 11px;
     margin-right: 22px;
@@ -83,8 +83,10 @@
     padding: 25px 38px 30px 30px;
   }
 
-  .header__logo_offset {
-    margin: 115px 0 0 156px;
+  .header_stretched {
+    justify-content: flex-start;
+    min-height: 300px;
+    padding-left: 186px;
   }
 
   .header__link-register {
@@ -105,7 +107,9 @@
     padding-right: 70px;
   }
 
-  .header__logo_offset {
-    margin: 115px 0 0 372px;
+  .header_stretched {
+    justify-content: flex-start;
+    min-height: 138px;
+    padding-left: 442px;
   }
 }

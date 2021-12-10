@@ -8,9 +8,14 @@ import SavedMovies from '../SavedMovies/SavedMovies.js';
 import Register from '../Register/Register.js';
 import Login from '../Login/Login.js';
 import Profile from '../Profile/Profile.js';
+import PageNoFound from '../PageNoFound/PageNoFound.js';
+import ModalDialog from '../ModalDialog/ModalDialog.js';
+import Preloader from '../Preloader/Preloader.js';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(true);
+  const [isModalDialogOpen, setIsModalDialogOpen] = useState(false);
+  const [isPreloaderOpen, setIsPreloaderOpen] = useState(false);
 
   const cards = new Array(12).fill({
     name: '33 слова о дизайне',
@@ -23,6 +28,10 @@ function App() {
     handleDeleteClick: () => {},
   });
 
+  const closeModalDialog = () => {
+    setIsModalDialogOpen(false);
+  };
+
   return (
     <CurrentUserContext.Provider value={{ loggedIn }}>
       <Routes>
@@ -32,7 +41,17 @@ function App() {
         <Route path={appRoutes.signUp} element={<Register />} />
         <Route path={appRoutes.signIn} element={<Login />} />
         <Route path={appRoutes.profile} element={<Profile />} />
+        <Route path='*' element={<PageNoFound />} />
       </Routes>
+
+      <ModalDialog
+        isOpen={isModalDialogOpen}
+        onClose={closeModalDialog}
+      />
+
+      <Preloader
+        isOpen={isPreloaderOpen}
+      />
     </CurrentUserContext.Provider>
   );
 }
