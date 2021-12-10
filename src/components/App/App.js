@@ -7,9 +7,10 @@ import Movies from '../Movies/Movies.js';
 import SavedMovies from '../SavedMovies/SavedMovies.js';
 import Register from '../Register/Register.js';
 import Login from '../Login/Login.js';
+import Profile from '../Profile/Profile.js';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
 
   const cards = new Array(12).fill({
     name: '33 слова о дизайне',
@@ -30,6 +31,7 @@ function App() {
         <Route path={appRoutes.savedMovies} element={<SavedMovies cards={cards.map(card => ({...card, isSaved: true}))} />} />
         <Route path={appRoutes.signUp} element={<Register />} />
         <Route path={appRoutes.signIn} element={<Login />} />
+        <Route path={appRoutes.profile} element={<Profile />} />
       </Routes>
     </CurrentUserContext.Provider>
   );

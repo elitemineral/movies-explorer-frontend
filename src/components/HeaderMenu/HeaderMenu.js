@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import Burger from '../Burger/Burger';
 import Popup from '../Popup/Popup';
-import { NavLink } from 'react-router-dom';
-import './HeaderMenu.css';
+import { NavLink, useLocation } from 'react-router-dom';
 import { appRoutes } from '../../utils/constants';
+import './HeaderMenu.css';
 
 const MAX_MOBILE_WIDTH = 1279;
 
@@ -36,9 +36,11 @@ export default function HeaderMenu() {
     return `link header__menu-link${isActive ? ' header__menu-link_active' : ''}`;
   }
 
+  const location = useLocation();
+
   const menuItems = () => {
     return (
-      <ul className='header__menu-items'>
+      <ul className={`header__menu-items${(location.pathname !== appRoutes.root  || isOpen) ? ' header__menu-items_theme-light' : ''}`}>
         {isMobile && (
           <li className='header__menu-item'>
             <NavLink className={getMenuLinkClassName} to={appRoutes.root}>Главная</NavLink>

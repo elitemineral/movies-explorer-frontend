@@ -18,7 +18,7 @@ export default function Header() {
   return (
     <header className={`header${location.pathname !== appRoutes.root ? ' header_theme-light' : ''}`}>
       <img className={`header__logo
-        ${(location.pathname === appRoutes.signIn || location.pathname === appRoutes.signUp || location.pathname === appRoutes.profile) ? ' header__logo_offset' : ''}`}
+        ${(location.pathname === appRoutes.signIn || location.pathname === appRoutes.signUp) ? ' header__logo_offset' : ''}`}
         src={headerLogo} alt='Логотип'
         onClick={handleLogoClick}
       />

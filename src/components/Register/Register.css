@@ -10,7 +10,7 @@
   gap: 20px;
 }
 
-.form__heading {
+.form__heading-auth {
   margin: 32px 0 60px;
 
   font-size: 24px;
@@ -19,13 +19,13 @@
   text-align: center;
 }
 
-.form__label {
+.form__label-auth {
   font-size: 10px;
   line-height: 12px;
   color: #a0a0a0;
 }
 
-.form__input {
+.form__input-auth {
   margin-top: 10px;
   width: 100%;
   height: 46px;
@@ -92,7 +92,7 @@
     width: 396px;
   }
 
-  .form__heading {
+  .form__heading-auth {
     margin: 10px 0 20px;
     text-align: left;
   }
