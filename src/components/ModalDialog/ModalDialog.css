@@ -1,0 +1,61 @@
+.popup-modal-container {
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal {
+  width: 280px;
+  padding: 25px 22px;
+
+  box-sizing: border-box;
+  text-align: center;
+
+  background-color: #fff;
+  border-radius: 10px;
+  position: relative;
+}
+
+.modal__button-close {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background: url('../../images/close-modal-button.svg') center / 100% no-repeat;
+
+  border: 0;
+
+  position: absolute;
+  top: -35px;
+  right: 0;
+  cursor: pointer;
+
+  transform: rotate(-45deg);
+}
+
+@media (min-width: 768px) {
+  .modal {
+    width: 350px;
+    padding: 29px;
+  }
+
+  .modal__button-close {
+    width: 32px;
+    height: 32px;
+    top: -32px;
+    right: -32px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .modal {
+    width: 430px;
+    padding: 34px 36px 37px;
+  }
+
+  .modal__button-close {
+    width: 40px;
+    height: 40px;
+    top: -40px;
+    right: -40px;
+  }
+}
