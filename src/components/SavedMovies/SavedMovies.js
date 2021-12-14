@@ -9,7 +9,9 @@ export default function SavedMovies({ cards }) {
       <Header />
       <main>
         <SearchForm />
-        <MoviesCardList cards={cards} />
+        <section className='cards'>
+          <MoviesCardList cards={[]} />
+        </section>
       </main>
       <Footer />
     </>

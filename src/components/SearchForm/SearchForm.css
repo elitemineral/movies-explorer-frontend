@@ -22,7 +22,7 @@
 .search-form__input {
   max-height: 34px;
   width: 100%;
-  padding: 0 0 0 4px;
+  padding: 0 4px 0;
   box-sizing: border-box;
 
   font-family: inherit;
@@ -31,7 +31,6 @@
   background-color: #fafafa;
 
   border: none;
-  outline: none;
 }
 
 .form__button-submit {
@@ -66,7 +65,6 @@
   width: 36px;
   height: 20px;
   -webkit-appearance: none;
-  outline: none;
   background: #ebebeb;
   border-radius: 20px;
   cursor: pointer;

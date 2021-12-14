@@ -16,6 +16,12 @@
   position: relative;
 }
 
+.modal__message {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 500;
+}
+
 .modal__button-close {
   width: 26px;
   height: 26px;
@@ -38,6 +44,11 @@
     padding: 29px;
   }
 
+  .modal__message {
+    font-size: 22px;
+    line-height: 27px;
+  }
+
   .modal__button-close {
     width: 32px;
     height: 32px;
@@ -50,6 +61,11 @@
   .modal {
     width: 430px;
     padding: 34px 36px 37px;
+  }
+
+  .modal__message {
+    font-size: 24px;
+    line-height: 29px;
   }
 
   .modal__button-close {

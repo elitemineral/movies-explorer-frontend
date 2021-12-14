@@ -4,7 +4,6 @@ import './MoviesCardList.css';
 export default function MoviesCardList({ cards }) {
 
   return (
-    <section className='cards'>
       <ul className='cards__list'>
         {cards.map((card) => (
           <MoviesCard
@@ -21,6 +20,5 @@ export default function MoviesCardList({ cards }) {
           />
         ))}
       </ul>
-    </section>
   );
 }

@@ -2,7 +2,7 @@ import Popup from '../Popup/Popup';
 import './ModalDialog.css';
 
 export default function ModalDialog(props) {
-  const { isOpen, onClose } = props;
+  const { isOpen, text, img, note, onClose } = props;
 
   return (
     <Popup
@@ -11,7 +11,8 @@ export default function ModalDialog(props) {
       containerClassName='popup-modal-container'
     >
       <div className='modal'>
-        <p className='modal__message'>Вы успешно зарегистрировались!</p>
+        <img className='modal__image' src={img} alt={note} />
+        <p className='modal__message'>{text}</p>
         <button
           className='modal__button-close'
           type='button'

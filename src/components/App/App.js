@@ -1,20 +1,22 @@
-import Main from '../Main/Main.js';
+import Main from '../Main/Main';
 import { Route, Routes } from 'react-router-dom';
-import { appRoutes } from '../../utils/constants.js';
+import { appRoutes } from '../../utils/constants';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { useState } from 'react';
-import Movies from '../Movies/Movies.js';
-import SavedMovies from '../SavedMovies/SavedMovies.js';
-import Register from '../Register/Register.js';
-import Login from '../Login/Login.js';
-import Profile from '../Profile/Profile.js';
-import PageNoFound from '../PageNoFound/PageNoFound.js';
-import Preloader from '../Preloader/Preloader.js';
-import { useCallback } from 'react/cjs/react.development';
+import { useCallback, useState } from 'react';
+import Movies from '../Movies/Movies';
+import SavedMovies from '../SavedMovies/SavedMovies';
+import Register from '../Register/Register';
+import Login from '../Login/Login';
+import Profile from '../Profile/Profile';
+import PageNoFound from '../PageNoFound/PageNoFound';
+import Preloader from '../Preloader/Preloader';
+import ErrorModalDialog from '../ErrorModalDialog/ErrorModalDialog';
+import InfoModalDialog from '../InfoModalDialog/InfoModalDialog';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(true);
   const [isPreloaderOpen, setIsPreloaderOpen] = useState(false);
+  const [modalResult, setModalResult] = useState(null);
 
   const showPreloader = useCallback(() => {
     setIsPreloaderOpen(true);
@@ -24,12 +26,16 @@ function App() {
     setIsPreloaderOpen(false);
   }, []);
 
+  const onCloseModalDialog = () => {
+    setModalResult(null);
+  }
+
   return (
-    <CurrentUserContext.Provider value={{ loggedIn, showPreloader, hidePreloader }}>
+    <CurrentUserContext.Provider value={{ loggedIn, showPreloader, hidePreloader, setModalResult }}>
       <Routes>
         <Route path={appRoutes.root} element={<Main />} />
         <Route path={appRoutes.movies} element={<Movies />} />
-        {/* <Route path={appRoutes.savedMovies} element={<SavedMovies cards={cards.map(card => ({...card, isSaved: true}))} />} /> */}
+        <Route path={appRoutes.savedMovies} element={<SavedMovies />} />
         <Route path={appRoutes.signUp} element={<Register />} />
         <Route path={appRoutes.signIn} element={<Login />} />
         <Route path={appRoutes.profile} element={<Profile />} />
@@ -38,6 +44,16 @@ function App() {
 
       <Preloader
         isOpen={isPreloaderOpen}
+      />
+
+      <ErrorModalDialog
+        data={modalResult}
+        onClose={onCloseModalDialog}
+      />
+
+      <InfoModalDialog
+        data={modalResult}
+        onClose={onCloseModalDialog}
       />
     </CurrentUserContext.Provider>
   );

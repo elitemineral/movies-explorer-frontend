@@ -10,34 +10,36 @@ import './Movies.css';
 export default function Movies() {
   const showPreloader = useContext(CurrentUserContext).showPreloader;
   const hidePreloader = useContext(CurrentUserContext).hidePreloader;
+  const setModalResult = useContext(CurrentUserContext).setModalResult;
 
   const cardsSettings = useCallback(() => {
     const width = window.innerWidth;
 
-    let totalCards;
+    let initialCardsCount;
     let cardsLineLength;
 
     if (width < 768) {
-      totalCards = 5;
+      initialCardsCount = 5;
       cardsLineLength = 2;
     } else {
       if (width < 1280) {
-        totalCards = 8;
+        initialCardsCount = 8;
         cardsLineLength = 2;
       } else {
-        totalCards = 12;
+        initialCardsCount = 12;
         cardsLineLength = 3;
       }
     }
 
     return {
-      totalCards,
+      initialCardsCount,
       cardsLineLength,
     };
   }, []);
 
   const [cards, setCards] = useState([]);
   const [filteredCards, setFilteredCards] = useState([]);
+  const [cardsCounter, setCardsCounter] = useState(cardsSettings().initialCardsCount);
   const [cardsLineLength, setCardsLineLength] = useState(cardsSettings().cardsLineLength);
 
   const resizeWindow = useCallback(() => {
@@ -45,7 +47,6 @@ export default function Movies() {
     if (newCardsLineLength !== cardsLineLength) {
       setCardsLineLength(newCardsLineLength);
     }
-
   }, [cardsLineLength, cardsSettings]);
 
   useEffect(() => {
@@ -53,32 +54,51 @@ export default function Movies() {
     return () => window.removeEventListener('resize', resizeWindow);
   }, [resizeWindow]);
 
-  // Загрузка данных
-  useEffect(() => {
+  const handleBtnMoreClick = useCallback(() => {
+    setCardsCounter(prevValue => prevValue + cardsLineLength);
+
+    setFilteredCards(prevCards => {
+      return [...prevCards, ...cards.slice(prevCards.length, prevCards.length + cardsLineLength)]
+    });
+  }, [cards, cardsLineLength]);
+
+  const onSearchFormSubmit = useCallback((query, isShortMovie) => {
     showPreloader();
 
     moviesApi.getInitialCards()
-      .then(res => {
-        setCards(res);
-        setFilteredCards(res.slice(0, cardsSettings().totalCards));
-      })
-      .catch(err => console.log(err))
-      .finally(() => hidePreloader())
-  }, [showPreloader, hidePreloader, cardsSettings]);
+    .then(res => {
+      const cards = res
+        .filter(card => card.nameRU
+          .toUpperCase().includes(query.toUpperCase()) &&
+          (isShortMovie ? card.duration <= 40 : true)
+        );
 
-  const handleClick = useCallback(() => {
-    setFilteredCards([...filteredCards, ...cards.slice(filteredCards.length, filteredCards.length + cardsLineLength)]);
-  }, [cards, filteredCards, cardsLineLength]);
+      setCards(cards);
+
+      const cardsCount = cardsSettings().initialCardsCount;
+      setCardsCounter(cardsCount);
+      setFilteredCards(cards.slice(0, cardsCount));
+    })
+    .catch(() => setModalResult({
+      text: 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз.',
+      isError: true,
+    }))
+    .finally(hidePreloader);
+  }, [cardsSettings, showPreloader, hidePreloader, setModalResult]);
 
   return (
     <>
       <Header />
       <main>
-        <SearchForm />
-        <MoviesCardList cards={filteredCards} />
-        {filteredCards.length < cards.length &&
-          <button className='button cards__button-more' onClick={handleClick}>Ещё</button>
-        }
+        <SearchForm
+          onSubmit={onSearchFormSubmit}
+        />
+        <section className='cards'>
+          <MoviesCardList cards={filteredCards} />
+          {cardsCounter < cards.length && (
+            <button className='button cards__button-more' onClick={handleBtnMoreClick}>Ещё</button>
+          )}
+        </section>
       </main>
       <Footer />
     </>

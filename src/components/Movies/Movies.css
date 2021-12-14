@@ -1,3 +1,8 @@
+.cards {
+  padding: 38px 10px 26px;
+  background-color: #fafafa;
+}
+
 .cards__button-more {
   width: 238px;
   height: 34px;
@@ -14,7 +19,15 @@
   font-weight: 500;
 }
 
+.cards__button-more:focus{
+  outline: 2px solid #000;
+}
+
 @media (min-width: 768px) {
+  .cards {
+    padding: 70px 30px 30px;
+  }
+
   .cards__button-more {
     width: 318px;
     margin: 80px auto 50px;
@@ -22,6 +35,10 @@
 }
 
 @media (min-width: 1280px) {
+  .cards {
+    padding: 68px 70px 10px;
+  }
+
   .cards__button-more {
     margin: 61px auto 56px;
   }
