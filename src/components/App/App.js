@@ -1,6 +1,6 @@
 import Main from '../Main/Main';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
-import { appRoutes, authStatuses, lsMoviesExplorerKeys as lsKeys, messages } from '../../utils/constants';
+import { appRoutes, authStatuses, messages, moviesApiBaseUrl } from '../../utils/constants';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { useCallback, useEffect, useState } from 'react';
 import Movies from '../Movies/Movies';
@@ -41,14 +41,12 @@ function App() {
         setSavedMovies(savedMovies);
         setAuthStatus(authStatuses.loggedIn);
 
-        const foundFilms = lsHelper.foundFilms;
+        const foundFilms = lsHelper.foundFilms();
         if (foundFilms) {
           setMovies(foundFilms);
         }
       })
-      .catch(() => {
-        setAuthStatus(authStatuses.loggedOut);
-      });
+      .catch(() => setAuthStatus(authStatuses.loggedOut));
   }, []);
 
   useEffect(() => {
@@ -72,7 +70,7 @@ function App() {
           isError: true,
         })
       );
-  }, [nav]);
+  }, [loadData, nav]);
 
   const handleRegister = useCallback(({ name, email, password }) => {
     mainApi
@@ -90,39 +88,76 @@ function App() {
   }, [handleAuthorize]);
 
   const handleLogout = useCallback(() => {
-    mainApi.logout().then(() => {
-      setAuthStatus(authStatuses.loggedOut);
-      nav(appRoutes.signIn);
-
-    });
+    mainApi.logout()
+      .then(() => {
+        setAuthStatus(authStatuses.loggedOut);
+        nav(appRoutes.signIn);
+      })
+      .catch(err => console.log(err));
   }, [nav]);
 
   const handleSearchMovies = useCallback((query, isShortMovie) => {
     setIsPreloaderOpen(true);
 
-    moviesApi.getInitialCards()
+    moviesApi.getMovies()
       .then(res => {
         const movies = res
-          .filter(movie => movie.nameRU
-            .toUpperCase().includes(query.toUpperCase()) &&
+          .filter(movie => movie.nameRU.toUpperCase()
+            .includes(query.toUpperCase()) &&
               (isShortMovie ? movie.duration <= SHORT_MOVIE_DURATION : true)
-          );
+          )
+          .map(movie => ({
+            ...movie,
+            isLiked: savedMovies.some(savedMovie => savedMovie.id === movie.id),
+            image: `${moviesApiBaseUrl}${movie.image.url}`,
+            thumbnail: `${moviesApiBaseUrl}${movie.image.formats.thumbnail.url}`,
+            trailer: movie.trailerLink,
+          }));
 
         setMovies(movies);
-
-        // setMoviesCounter(moviesSettings.startCount);
-        // setFilteredMovies(movies.slice(0, moviesSettings.startCount));
-
-        //lsHelper.saveMovies(movies, query, isShortMovie, moviesSettings.startCount);
-        lsHelper.setFoundFilms(JSON.stringify(movies));
-        lsHelper.setCounter(12);
+        lsHelper.setFoundFilms(movies);
       })
       .catch(() => setModalResult({
         text: messages.serverError,
         isError: true,
       }))
       .finally(() => setIsPreloaderOpen(false));
-  }, [setModalResult]);
+  }, [savedMovies, setModalResult]);
+
+  const handleMovieLike = useCallback((movie) => {
+    if (movie.isLiked) {
+      const movieId = savedMovies.find(savedMovie => savedMovie.movieId === movie.id)._id;
+
+      mainApi.deleteMovie(movieId)
+        .then(() => {
+          setMovies(prevMovies => {
+            const newMovies = prevMovies.map(prevMovie => prevMovie.id !== movie.id ? prevMovie : {...prevMovie, isLiked: false });
+
+            lsHelper.setFoundFilms(newMovies);
+            return newMovies;
+          });
+
+          setSavedMovies(prevSavedMovies => prevSavedMovies
+            .filter(savedMovie => savedMovie.movieId !== movie.id));
+        })
+        .catch();
+    } else {
+      mainApi.saveMovie({...movie,
+        movieId: movie.id,
+      })
+        .then(savedMovie => {
+          setMovies(prevMovies => {
+            const newMovies = prevMovies.map(prevMovie => prevMovie.id !== movie.id ? prevMovie : {...prevMovie, isLiked: true });
+
+            lsHelper.setFoundFilms(newMovies);
+            return newMovies;
+          });
+
+          setSavedMovies(prevSavedMovies => [...prevSavedMovies, { ...savedMovie, isSaved: true }]);
+        })
+        .catch();
+    }
+  }, [savedMovies]);
 
   return (
     <CurrentUserContext.Provider
@@ -134,7 +169,8 @@ function App() {
         handleAuthorize,
         handleLogout,
         setModalResult,
-        handleSearchMovies
+        handleSearchMovies,
+        handleMovieLike
       }}
     >
       <Routes>

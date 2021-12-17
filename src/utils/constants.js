@@ -13,14 +13,13 @@ export const appRoutes = {
   signUp: '/signup',
 }
 
-export const mainApiBaseUrl = 'http://localhost:3001';
+export const mainApiBaseUrl = 'https://api.best-movies-explorer.nomoredomains.rocks';
 export const moviesApiBaseUrl = 'https://api.nomoreparties.co';
 
 export const lsMoviesExplorerKeys = {
-  moviesExplorerFoundFilms: 'moviesExplorerFoundFilms',
+  moviesExplorerFoundMovies: 'moviesExplorerFoundMovies',
   moviesExplorerQueryString: 'moviesExplorerQueryString',
   moviesExplorerIsShortMovie: 'moviesExplorerIsShortMovie',
-  moviesExplorerCounter: 'moviesExplorerCounter',
 }
 
 export const messages = {

@@ -16,7 +16,7 @@ class MoviesApi {
       );
   }
 
-  getInitialCards() {
+  getMovies() {
     return this._promiseHandler(
       fetch(`${this._apiUrl}`, {
         method: 'GET',

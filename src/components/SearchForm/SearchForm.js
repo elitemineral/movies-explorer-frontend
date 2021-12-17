@@ -8,8 +8,8 @@ export default function SearchForm() {
   const setModalResult = useContext(CurrentUserContext).setModalResult;
   const handleSearchMovies = useContext(CurrentUserContext).handleSearchMovies;
 
-  const [query, setQuery] = useState(lsHelper.queryString);
-  const [isShortMovie, setIsShortMovie] = useState(lsHelper.isShortMovie);
+  const [query, setQuery] = useState(lsHelper.queryString());
+  const [isShortMovie, setIsShortMovie] = useState(lsHelper.isShortMovie());
 
   const handleQueryChange = (evt) => {
     setQuery(evt.target.value);

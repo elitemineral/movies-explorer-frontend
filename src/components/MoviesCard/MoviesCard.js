@@ -1,18 +1,11 @@
-import { moviesApiBaseUrl } from '../../utils/constants';
+import { useCallback, useContext } from 'react';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './MoviesCard.css';
 
 export default function MoviesCard(props) {
-  const {
-    id,
-    name,
-    duration,
-    image,
-    trailerLink,
-    isLiked,
-    isSaved,
-    onMovieLike,
-    onMovieDelete,
-  } = props;
+  const handleMovieLike = useContext(CurrentUserContext).handleMovieLike;
+
+  const movie = props.movie;
 
   const minutesToHm = (value) => {
     value = Number(value);
@@ -22,43 +15,43 @@ export default function MoviesCard(props) {
     return h + 'ч ' + m + 'м';
   };
 
-  const handleMovieClick = () => {
-    window.open(trailerLink, '_blank');
-  }
+  const handleMovieClick = useCallback(() => {
+    window.open(movie.trailer, '_blank');
+  }, [movie]);
 
-  const handleMovieLike = () => {
-    onMovieLike(id);
-  }
+  const handleBtnLikeClick = useCallback(() => {
+    handleMovieLike(movie);
+  }, [handleMovieLike, movie]);
 
   return (
     <li className='movies__item'>
       <img
         className='movie__image'
-        src={`${moviesApiBaseUrl}${image}`}
-        alt={name}
+        src={movie.image}
+        alt={movie.nameRU}
         onClick={handleMovieClick}
       />
       <div className='movies__container'>
-        <h2 className='movies__title'>{name}</h2>
-        {isSaved ? (
+        <h2 className='movies__title'>{movie.nameRU}</h2>
+        {movie.isSaved ? (
           <button
             className='button movies__button-delete'
             type='button'
-            onClick={onMovieDelete}
+            onClick={() => {}}
             aria-label='Удалить'
           ></button>
         ) : (
           <button
             className={`button movies__button-like${
-              isLiked ? ' movies__button-like_active' : ''
+              movie.isLiked ? ' movies__button-like_active' : ''
             }`}
             type='button'
-            onClick={handleMovieLike}
+            onClick={handleBtnLikeClick}
             aria-label='Добавить в избранное'
           />
         )}
       </div>
-      <p className='movies__movie-duration'>{minutesToHm(duration)}</p>
+      <p className='movies__movie-duration'>{minutesToHm(movie.duration)}</p>
     </li>
   );
 }

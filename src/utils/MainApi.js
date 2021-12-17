@@ -67,6 +67,28 @@ class Api {
       })
     );
   }
+
+  saveMovie(movie) {
+    return this._promiseHandler(
+      fetch(`${this._apiUrl}/movies`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(movie),
+      })
+    );
+  }
+
+  deleteMovie(movieId) {
+    return this._promiseHandler(
+      fetch(`${this._apiUrl}/movies/${movieId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+    );
+  }
 }
 
 export default new Api(mainApiBaseUrl);
