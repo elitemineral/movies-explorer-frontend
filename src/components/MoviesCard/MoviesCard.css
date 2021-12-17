@@ -1,10 +1,10 @@
-.cards__item {
+.movies__item {
   background: #fff;
   box-shadow: 0px 4px 30px rgba(0, 0, 0, .08);
   border-radius: 6px;
 }
 
-.cards__image {
+.movie__image {
   width: 100%;
   height: 168px;
   border-top-left-radius: 6px;
@@ -16,7 +16,7 @@
   display: block;
 }
 
-.cards__container {
+.movies__container {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -24,7 +24,7 @@
   margin: 14px 18px 14px 14px;
 }
 
-.cards__title {
+.movies__title {
   margin: 0;
 
   font-size: 12px;
@@ -33,7 +33,7 @@
   text-shadow: 0px 4px 4px rgba(0, 0, 0, .25);
 }
 
-.cards__button-delete {
+.movies__button-delete {
   width: 8px;
   height: 8px;
   padding: 0;
@@ -42,7 +42,7 @@
   align-self: center;
 }
 
-.cards__button-like {
+.movies__button-like {
   width: 14px;
   height: 12px;
   padding: 0;
@@ -50,11 +50,11 @@
   flex-shrink: 0;
 }
 
-.cards__button-like_active {
+.movies__button-like_active {
   background: url('../../images/like-button-active.svg') no-repeat;
 }
 
-.cards__movie-duration {
+.movies__movie-duration {
   font-size: 10px;
   line-height: 12px;
   color: #a0a0a0;
@@ -62,36 +62,36 @@
 }
 
 @media (min-width: 768px) {
-  .cards__container {
+  .movies__container {
     margin: 14px 22px 15px 15px;
   }
 
-  .cards__image {
+  .movie__image {
     height: 190px;
   }
 
-  .cards__title {
+  .movies__title {
     font-size: 13px;
     line-height: 16px;
     text-shadow: none;
   }
 
-  .cards__movie-duration {
+  .movies__movie-duration {
     font-size: 11px;
     line-height: 13px;
   }
 }
 
 @media (min-width: 1280px) {
-  .cards__container {
+  .movies__container {
     margin: 16px 24px 17px 16px;
   }
 
-  .cards__image {
+  .movie__image {
     height: 203px;
   }
 
-  .cards__movie-duration {
+  .movies__movie-duration {
     margin: 0 16px 15px;
   }
 }

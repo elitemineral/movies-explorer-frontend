@@ -1,7 +1,11 @@
+import { useContext } from "react";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import Header from "../Header/Header";
 import './Profile.css';
 
 export default function Profile() {
+  const handleLogout = useContext(CurrentUserContext).handleLogout;
+
   return (
     <>
       <Header />
@@ -50,7 +54,7 @@ export default function Profile() {
           </form>
           <button
             className='button form__button-exit-profile'
-            type='submit'
+            onClick={handleLogout}
           >
             Выйти из аккаунта
           </button>

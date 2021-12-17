@@ -1,9 +1,27 @@
 import { Link } from 'react-router-dom';
 import { appRoutes } from '../../utils/constants';
 import Header from '../Header/Header';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { useContext } from 'react';
+import { useState } from 'react/cjs/react.development';
 import './Login.css';
 
 export default function Login() {
+  const handleAuthorize = useContext(CurrentUserContext).handleAuthorize;
+
+  const [loginData, setLoginData] = useState({});
+  const handleChange = (evt) => {
+    setLoginData({
+      ...loginData,
+      [evt.target.name]: evt.target.value
+    });
+  }
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    handleAuthorize(loginData);
+  }
+
   return (
     <>
       <Header />
@@ -12,7 +30,7 @@ export default function Login() {
           <form
             className='form form-login'
             name='form-login'
-            onSubmit={() => {}}
+            onSubmit={handleSubmit}
           >
             <h1 className='form__heading-auth'>
               Рады видеть!
@@ -23,8 +41,8 @@ export default function Login() {
                 className='form__input-auth'
                 name='email'
                 type='email'
-                //value=''
-                //onChange={() => {}}
+                value={loginData.email || ''}
+                onChange={handleChange}
                 required
               />
               <span className='form__input-error'>Что-то пошло не так...</span>
@@ -37,8 +55,8 @@ export default function Login() {
                 type='password'
                 minLength={8}
                 maxLength={15}
-                //value=''
-                //onChange={() => {}}
+                value={loginData.password || ''}
+                onChange={handleChange}
                 required
               />
               <span className='form__input-error'>Что-то пошло не так...</span>

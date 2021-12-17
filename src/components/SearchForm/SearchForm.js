@@ -1,13 +1,15 @@
 import { useContext } from 'react';
 import { useState } from 'react/cjs/react.development';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { lsHelper } from '../../utils/helpers';
 import './SearchForm.css';
 
-export default function SearchForm(props) {
+export default function SearchForm() {
   const setModalResult = useContext(CurrentUserContext).setModalResult;
+  const handleSearchMovies = useContext(CurrentUserContext).handleSearchMovies;
 
-  const [query, setQuery] = useState(null);
-  const [isShortMovie, setIsShortMovie] = useState(true);
+  const [query, setQuery] = useState(lsHelper.queryString);
+  const [isShortMovie, setIsShortMovie] = useState(lsHelper.isShortMovie);
 
   const handleQueryChange = (evt) => {
     setQuery(evt.target.value);
@@ -22,14 +24,19 @@ export default function SearchForm(props) {
         isError: true,
       });
 
+      lsHelper.setQueryString('');
       return;
     }
 
-    props.onSubmit(query, isShortMovie);
+    lsHelper.setQueryString(query);
+    handleSearchMovies(query, isShortMovie);
   }
 
   const handleToggleShortMovie = () => {
-    setIsShortMovie(prevValue => !prevValue);
+    setIsShortMovie(prevValue => {
+      lsHelper.setIsShortMovie(!prevValue);
+      return !prevValue;
+    });
   }
 
   return (

@@ -3,51 +3,55 @@ import Header from '../Header/Header';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import SearchForm from '../SearchForm/SearchForm';
 import moviesApi from '../../utils/MoviesApi';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { lsMoviesExplorerKeys as lsKeys, messages } from '../../utils/constants';
 import './Movies.css';
+import { lsHelper } from '../../utils/helpers';
+
+// const SHORT_MOVIE_DURATION = 40;
 
 export default function Movies() {
-  const showPreloader = useContext(CurrentUserContext).showPreloader;
-  const hidePreloader = useContext(CurrentUserContext).hidePreloader;
-  const setModalResult = useContext(CurrentUserContext).setModalResult;
+  const movies = useContext(CurrentUserContext).movies;
 
-  const cardsSettings = useCallback(() => {
+  const getMoviesSettings = useCallback(() => {
     const width = window.innerWidth;
 
-    let initialCardsCount;
-    let cardsLineLength;
+    let startCount;
+    let lineLength;
 
     if (width < 768) {
-      initialCardsCount = 5;
-      cardsLineLength = 2;
+      startCount = 5;
+      lineLength = 2;
     } else {
       if (width < 1280) {
-        initialCardsCount = 8;
-        cardsLineLength = 2;
+        startCount = 8;
+        lineLength = 2;
       } else {
-        initialCardsCount = 12;
-        cardsLineLength = 3;
+        startCount = 12;
+        lineLength = 3;
       }
     }
 
+    const initialCounter = lsHelper.getItem(lsKeys.moviesExplorerCounter);
+
     return {
-      initialCardsCount,
-      cardsLineLength,
+      startCount: initialCounter ?? startCount,
+      lineLength,
     };
   }, []);
 
-  const [cards, setCards] = useState([]);
-  const [filteredCards, setFilteredCards] = useState([]);
-  const [cardsCounter, setCardsCounter] = useState(cardsSettings().initialCardsCount);
-  const [cardsLineLength, setCardsLineLength] = useState(cardsSettings().cardsLineLength);
+  const initialSetting = useMemo(() => getMoviesSettings(), [getMoviesSettings]);
+  const [filteredMovies, setFilteredMovies] = useState(movies.slice(0, initialSetting.startCount));
+  const [moviesSettings, setMoviesSettings] = useState(initialSetting);
 
   const resizeWindow = useCallback(() => {
-    const newCardsLineLength = cardsSettings().cardsLineLength;
-    if (newCardsLineLength !== cardsLineLength) {
-      setCardsLineLength(newCardsLineLength);
+    const newCardsSetting = getMoviesSettings();
+    if ((newCardsSetting.lineLength !== moviesSettings.lineLength) ||
+        (newCardsSetting.startCount !== moviesSettings.startCount)) {
+          setMoviesSettings(newCardsSetting);
     }
-  }, [cardsLineLength, cardsSettings]);
+  }, [getMoviesSettings, moviesSettings]);
 
   useEffect(() => {
     window.addEventListener('resize', resizeWindow);
@@ -55,48 +59,31 @@ export default function Movies() {
   }, [resizeWindow]);
 
   const handleBtnMoreClick = useCallback(() => {
-    setCardsCounter(prevValue => prevValue + cardsLineLength);
-
-    setFilteredCards(prevCards => {
-      return [...prevCards, ...cards.slice(prevCards.length, prevCards.length + cardsLineLength)]
+    setFilteredMovies(prevCards => {
+      localStorage.setItem('moviesExplorerCounter', prevCards.length + moviesSettings.lineLength);
+      return [...prevCards, ...movies.slice(prevCards.length, prevCards.length + moviesSettings.lineLength)]
     });
-  }, [cards, cardsLineLength]);
+  }, [movies, moviesSettings]);
 
-  const onSearchFormSubmit = useCallback((query, isShortMovie) => {
-    showPreloader();
+  // const onMovieLike = useCallback((movieId) => {
+  //   const movie = movies.find(movie => movie.id === movieId);
+  //   movie.isLiked = true;
 
-    moviesApi.getInitialCards()
-    .then(res => {
-      const cards = res
-        .filter(card => card.nameRU
-          .toUpperCase().includes(query.toUpperCase()) &&
-          (isShortMovie ? card.duration <= 40 : true)
-        );
-
-      setCards(cards);
-
-      const cardsCount = cardsSettings().initialCardsCount;
-      setCardsCounter(cardsCount);
-      setFilteredCards(cards.slice(0, cardsCount));
-    })
-    .catch(() => setModalResult({
-      text: 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз.',
-      isError: true,
-    }))
-    .finally(hidePreloader);
-  }, [cardsSettings, showPreloader, hidePreloader, setModalResult]);
+  //   localStorage.setItem('moviesExplorerFoundFilms', JSON.stringify(movies));
+  // }, [movies]);
 
   return (
     <>
       <Header />
       <main>
-        <SearchForm
-          onSubmit={onSearchFormSubmit}
-        />
-        <section className='cards'>
-          <MoviesCardList cards={filteredCards} />
-          {cardsCounter < cards.length && (
-            <button className='button cards__button-more' onClick={handleBtnMoreClick}>Ещё</button>
+        <SearchForm />
+        <section className='movies'>
+          <MoviesCardList
+            movies={filteredMovies}
+            // onMovieLike={onMovieLike}
+          />
+          {filteredMovies.length < movies.length && (
+            <button className='button movies__button-more' onClick={handleBtnMoreClick}>Ещё</button>
           )}
         </section>
       </main>

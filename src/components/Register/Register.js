@@ -1,9 +1,28 @@
 import { Link } from 'react-router-dom';
 import { appRoutes } from '../../utils/constants';
 import Header from '../Header/Header';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { useContext } from 'react';
+import { useState } from 'react/cjs/react.development';
 import './Register.css';
 
 export default function Register() {
+  const handleRegister = useContext(CurrentUserContext).handleRegister;
+
+  const [registerData, setRegisterData] = useState({});
+
+  const handleChange = (evt) => {
+    setRegisterData({
+      ...registerData,
+      [evt.target.name]: evt.target.value,
+    });
+  };
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    handleRegister(registerData);
+  };
+
   return (
     <>
       <Header />
@@ -12,7 +31,7 @@ export default function Register() {
           <form
             className='form form-register'
             name='form-register'
-            onSubmit={() => {}}
+            onSubmit={handleSubmit}
           >
             <h1 className='form__heading-auth'>
               Добро пожаловать!
@@ -23,8 +42,8 @@ export default function Register() {
                 className='form__input-auth'
                 name='name'
                 type='text'
-                // value=''
-                // onChange={() => {}}
+                value={registerData.name || ''}
+                onChange={handleChange}
                 required
               />
               <span className='form__input-error form__input-error_visible'>Что-то пошло не так...</span>
@@ -35,8 +54,8 @@ export default function Register() {
                 className='form__input-auth'
                 name='email'
                 type='email'
-                // value=''
-                // onChange={() => {}}
+                value={registerData.email || ''}
+                onChange={handleChange}
                 required
               />
               <span className='form__input-error form__input-error_visible'>Что-то пошло не так...</span>
@@ -48,9 +67,8 @@ export default function Register() {
                 name='password'
                 type='password'
                 minLength={8}
-                maxLength={15}
-                // value=''
-                // onChange={() => {}}
+                value={registerData.password || ''}
+                onChange={handleChange}
                 required
               />
               <span className='form__input-error form__input-error_visible'>Что-то пошло не так...</span>

@@ -1,22 +1,27 @@
-import { moviesApiBaseUrl } from "./constants";
+import { moviesApiBaseUrl } from './constants';
 
 class MoviesApi {
   constructor(apiUrl) {
     this._apiUrl = apiUrl;
   }
 
-  async _promiseHandler(promise) {
+  _promiseHandler(promise) {
     return promise
       .then(res => res.ok
         ? res.json()
-        : Promise.reject(`Ошибка: ${res.status}`)
+        : Promise.reject({
+            text: res.statusText,
+            status: res.status
+          })
       );
   }
 
   getInitialCards() {
-    return this._promiseHandler(fetch(`${this._apiUrl}`, {
-      method: 'GET',
-    }));
+    return this._promiseHandler(
+      fetch(`${this._apiUrl}`, {
+        method: 'GET',
+      })
+    );
   }
 }
 
