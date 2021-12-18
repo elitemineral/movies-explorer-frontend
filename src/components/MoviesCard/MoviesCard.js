@@ -3,7 +3,10 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './MoviesCard.css';
 
 export default function MoviesCard(props) {
+  const setModalInfo = useContext(CurrentUserContext).setModalInfo;
   const handleMovieLike = useContext(CurrentUserContext).handleMovieLike;
+  const handleMovieDelete = useContext(CurrentUserContext).handleMovieDelete;
+  const isOffline = useContext(CurrentUserContext).isOffline;
 
   const movie = props.movie;
 
@@ -20,8 +23,22 @@ export default function MoviesCard(props) {
   }, [movie]);
 
   const handleBtnLikeClick = useCallback(() => {
+    if (isOffline) {
+      setModalInfo({ text: 'Отсутствует интерент-соединение', code: 200 });
+      return;
+    }
+
     handleMovieLike(movie);
-  }, [handleMovieLike, movie]);
+  }, [setModalInfo, isOffline, handleMovieLike, movie]);
+
+  const handleBtnDeleteClick = useCallback(() => {
+    if (isOffline) {
+      setModalInfo({ text: 'Отсутствует интерент-соединение', code: 200 });
+      return;
+    }
+
+    handleMovieDelete(movie);
+  }, [setModalInfo, isOffline, handleMovieDelete, movie]);
 
   return (
     <li className='movies__item'>
@@ -37,7 +54,7 @@ export default function MoviesCard(props) {
           <button
             className='button movies__button-delete'
             type='button'
-            onClick={() => {}}
+            onClick={handleBtnDeleteClick}
             aria-label='Удалить'
           ></button>
         ) : (

@@ -6,7 +6,7 @@ export default function MoviesCardList({ movies }) {
       <ul className='movies__list'>
         {movies.map(movie => (
           <MoviesCard
-            key={movie.id}
+            key={movie.id ?? movie._id}
             movie={movie}
           />
         ))}

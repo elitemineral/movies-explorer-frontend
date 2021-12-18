@@ -1,12 +1,13 @@
 import { useContext } from 'react';
-import { useState } from 'react/cjs/react.development';
+import { useCallback, useState } from 'react/cjs/react.development';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { lsHelper } from '../../utils/helpers';
 import './SearchForm.css';
 
 export default function SearchForm() {
-  const setModalResult = useContext(CurrentUserContext).setModalResult;
+  const setModalInfo = useContext(CurrentUserContext).setModalInfo;
   const handleSearchMovies = useContext(CurrentUserContext).handleSearchMovies;
+  const isOffline = useContext(CurrentUserContext).isOffline;
 
   const [query, setQuery] = useState(lsHelper.queryString());
   const [isShortMovie, setIsShortMovie] = useState(lsHelper.isShortMovie());
@@ -15,22 +16,27 @@ export default function SearchForm() {
     setQuery(evt.target.value);
   }
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = useCallback((evt) => {
     evt.preventDefault();
 
+    if (isOffline) {
+      setModalInfo({ text: 'Отсутствует интерент-соединение', code: 200 });
+      return;
+    }
+
     if (!query) {
-      setModalResult({
+      setModalInfo({
         text: 'Нужно ввести ключевое слово.',
-        isError: true,
+        code: -1,
       });
 
-      lsHelper.setQueryString('');
+      lsHelper.removeQueryString();
       return;
     }
 
     lsHelper.setQueryString(query);
     handleSearchMovies(query, isShortMovie);
-  }
+  }, [setModalInfo, isOffline, query, handleSearchMovies, isShortMovie]);
 
   const handleToggleShortMovie = () => {
     setIsShortMovie(prevValue => {

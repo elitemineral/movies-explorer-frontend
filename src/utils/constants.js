@@ -20,6 +20,7 @@ export const lsMoviesExplorerKeys = {
   moviesExplorerFoundMovies: 'moviesExplorerFoundMovies',
   moviesExplorerQueryString: 'moviesExplorerQueryString',
   moviesExplorerIsShortMovie: 'moviesExplorerIsShortMovie',
+  moviesExplorerCounter: 'moviesExplorerCounter',
 }
 
 export const messages = {
@@ -31,4 +32,6 @@ export const messages = {
 
   authorizeIncorrectDataError: 'Вы ввели неправильный логин или пароль.',
   authorizeError: 'При авторизации произошла ошибка.',
+
+  badRequesError: 'Сервер не смог распознать запрос.',
 }

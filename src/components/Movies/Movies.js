@@ -5,9 +5,11 @@ import SearchForm from '../SearchForm/SearchForm';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './Movies.css';
+import { lsHelper } from '../../utils/helpers';
 
 export default function Movies() {
   const movies = useContext(CurrentUserContext).movies;
+  const isEmptyResult = useContext(CurrentUserContext).isEmptyResult;
 
   const getMoviesSettings = useCallback(() => {
     const width = window.innerWidth;
@@ -29,7 +31,7 @@ export default function Movies() {
     }
 
     return {
-      startingCounter,
+      startingCounter: lsHelper.moviesCounter() ?? startingCounter,
       moviesPerLine,
     };
   }, []);
@@ -53,7 +55,11 @@ export default function Movies() {
   }, [resizeWindow]);
 
   const handleBtnMoreClick = useCallback(() => {
-    setFilteredMovies(prevMovies => [...prevMovies, ...movies.slice(prevMovies.length, prevMovies.length + moviesSettings.moviesPerLine)]);
+    setFilteredMovies(prevMovies => {
+      const newLength = prevMovies.length + moviesSettings.moviesPerLine;
+      lsHelper.setMoviesCounter(newLength);
+      return [...prevMovies, ...movies.slice(prevMovies.length, newLength)];
+    });
   }, [movies, moviesSettings]);
 
   return (
@@ -62,9 +68,13 @@ export default function Movies() {
       <main>
         <SearchForm />
         <section className='movies'>
-          <MoviesCardList
-            movies={filteredMovies}
-          />
+          {isEmptyResult ? (
+            <p className='movies__not-found'>Ничего не найдено</p>
+          ) : (
+            <MoviesCardList
+              movies={filteredMovies}
+            />)
+          }
           {filteredMovies.length < movies.length && (
             <button className='button movies__button-more' onClick={handleBtnMoreClick}>Ещё</button>
           )}

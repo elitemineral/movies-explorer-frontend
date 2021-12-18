@@ -6,14 +6,14 @@ class MoviesApi {
   }
 
   _promiseHandler(promise) {
-    return promise
-      .then(res => res.ok
+    return promise.then((res) =>
+      res.ok
         ? res.json()
         : Promise.reject({
             text: res.statusText,
-            status: res.status
+            code: res.status,
           })
-      );
+    );
   }
 
   getMovies() {

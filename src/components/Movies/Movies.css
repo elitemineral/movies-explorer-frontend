@@ -23,6 +23,15 @@
   outline: 2px solid #000;
 }
 
+.movies__not-found {
+  margin: 0;
+  color: red;
+  text-align: center;
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 500;
+}
+
 @media (min-width: 768px) {
   .movies {
     padding: 70px 30px 30px;
@@ -31,6 +40,11 @@
   .movies__button-more {
     width: 318px;
     margin: 80px auto 50px;
+  }
+
+  .movies__not-found {
+    font-size: 21px;
+    line-height: 26px;
   }
 }
 
@@ -41,5 +55,10 @@
 
   .movies__button-more {
     margin: 61px auto 56px;
+  }
+
+  .movies__not-found {
+    font-size: 24px;
+    line-height: 30px;
   }
 }

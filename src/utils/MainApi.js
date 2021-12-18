@@ -6,14 +6,14 @@ class Api {
   }
 
   _promiseHandler(promise) {
-    return promise.then((res) =>
+    return promise.then((res) => {
       res.ok
-        ? res.json()
-        : Promise.reject({
-            text: res.statusText,
-            status: res.status,
-          })
-    );
+      ? res.json()
+      : Promise.reject({
+          text: res.statusText,
+          code: res.status,
+        })
+    });
   }
 
   register(name, email, password) {
