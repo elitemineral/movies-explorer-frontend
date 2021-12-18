@@ -1,23 +1,13 @@
 import { moviesApiBaseUrl } from './constants';
+import { promiseHandler } from './MainApi';
 
 class MoviesApi {
   constructor(apiUrl) {
     this._apiUrl = apiUrl;
   }
 
-  _promiseHandler(promise) {
-    return promise.then((res) =>
-      res.ok
-        ? res.json()
-        : Promise.reject({
-            text: res.statusText,
-            code: res.status,
-          })
-    );
-  }
-
   getMovies() {
-    return this._promiseHandler(
+    return promiseHandler(
       fetch(`${this._apiUrl}`, {
         method: 'GET',
       })

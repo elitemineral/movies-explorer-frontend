@@ -1,6 +1,6 @@
 import Main from '../Main/Main';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
-import { appRoutes, authStatuses, moviesApiBaseUrl } from '../../utils/constants';
+import { appRoutes, authStatuses, messages, moviesApiBaseUrl } from '../../utils/constants';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { useCallback, useEffect, useState } from 'react';
 import Movies from '../Movies/Movies';
@@ -52,9 +52,7 @@ function App() {
           setMovies(foundFilms);
         }
       })
-      .catch((err) => {
-        setAuthStatus(authStatuses.loggedOut);
-      });
+      .catch(() => setAuthStatus(authStatuses.loggedOut));
   }, []);
 
   useEffect(() => {
@@ -79,6 +77,7 @@ function App() {
       .authorize(email, password)
       .then(() => {
         loadData();
+        setAuthStatus(authStatuses.loggedIn);
         nav(appRoutes.movies);
       })
       .catch(err => {
@@ -98,6 +97,11 @@ function App() {
   }, [handleAuthorize]);
 
   const handleLogout = useCallback(() => {
+    if (isOffline) {
+      setModalInfo({ text: messages.noConnection, code: 200 });
+      return;
+    }
+
     mainApi.logout()
       .then(() => {
         setAuthStatus(authStatuses.loggedOut);
@@ -106,7 +110,7 @@ function App() {
         setMovies([]);
       })
       .catch(err => setModalInfo({ text: err.text, code: err.code }));
-  }, [nav]);
+  }, [nav, setModalInfo, isOffline]);
 
   const handleSearchMovies = useCallback((query, isShortMovie) => {
     setIsPreloaderOpen(true);

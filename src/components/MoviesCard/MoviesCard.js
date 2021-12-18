@@ -1,5 +1,6 @@
 import { useCallback, useContext } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { messages } from '../../utils/constants';
 import './MoviesCard.css';
 
 export default function MoviesCard(props) {
@@ -24,7 +25,7 @@ export default function MoviesCard(props) {
 
   const handleBtnLikeClick = useCallback(() => {
     if (isOffline) {
-      setModalInfo({ text: 'Отсутствует интерент-соединение', code: 200 });
+      setModalInfo({ text: messages.noConnection, code: 200 });
       return;
     }
 
@@ -33,7 +34,7 @@ export default function MoviesCard(props) {
 
   const handleBtnDeleteClick = useCallback(() => {
     if (isOffline) {
-      setModalInfo({ text: 'Отсутствует интерент-соединение', code: 200 });
+      setModalInfo({ text: messages.noConnection, code: 200 });
       return;
     }
 

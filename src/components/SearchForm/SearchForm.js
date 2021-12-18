@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { useCallback, useState } from 'react/cjs/react.development';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { messages } from '../../utils/constants';
 import { lsHelper } from '../../utils/helpers';
 import './SearchForm.css';
 
@@ -20,7 +21,7 @@ export default function SearchForm() {
     evt.preventDefault();
 
     if (isOffline) {
-      setModalInfo({ text: 'Отсутствует интерент-соединение', code: 200 });
+      setModalInfo({ text: messages.noConnection, code: 200 });
       return;
     }
 

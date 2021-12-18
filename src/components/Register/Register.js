@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom';
-import { appRoutes } from '../../utils/constants';
+import { appRoutes, messages } from '../../utils/constants';
 import Header from '../Header/Header';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { useContext } from 'react';
-import { useState } from 'react/cjs/react.development';
+import { useCallback, useState } from 'react/cjs/react.development';
 import './Register.css';
 
 export default function Register() {
+  const setModalInfo = useContext(CurrentUserContext).setModalInfo;
   const handleRegister = useContext(CurrentUserContext).handleRegister;
+  const isOffline = useContext(CurrentUserContext).isOffline;
 
   const [registerData, setRegisterData] = useState({});
 
@@ -18,10 +20,16 @@ export default function Register() {
     });
   };
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = useCallback((evt) => {
     evt.preventDefault();
+
+    if (isOffline) {
+      setModalInfo({ text: messages.noConnection, code: 200 });
+      return;
+    }
+
     handleRegister(registerData);
-  };
+  }, [isOffline, handleRegister, registerData, setModalInfo]);
 
   return (
     <>

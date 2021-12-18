@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom';
-import { appRoutes } from '../../utils/constants';
+import { appRoutes, messages } from '../../utils/constants';
 import Header from '../Header/Header';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { useState } from 'react/cjs/react.development';
 import './Login.css';
 
 export default function Login() {
+  const setModalInfo = useContext(CurrentUserContext).setModalInfo;
   const handleAuthorize = useContext(CurrentUserContext).handleAuthorize;
+  const isOffline = useContext(CurrentUserContext).isOffline;
 
   const [loginData, setLoginData] = useState({});
   const handleChange = (evt) => {
@@ -17,10 +19,16 @@ export default function Login() {
     });
   }
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = useCallback((evt) => {
     evt.preventDefault();
+
+    if (isOffline) {
+      setModalInfo({ text: messages.noConnection, code: 200 });
+      return;
+    }
+
     handleAuthorize(loginData);
-  }
+  }, [isOffline, handleAuthorize, loginData, setModalInfo]);
 
   return (
     <>

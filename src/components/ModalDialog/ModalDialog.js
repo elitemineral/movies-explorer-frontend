@@ -14,10 +14,16 @@ export default function ModalDialog(props) {
         return messages.badRequesError;
       case 401:
         return messages.authorizeIncorrectDataError;
+      case 403:
+       return messages.noAccess;
+      case 404:
+        return messages.notFoundError;
       case 409:
         return messages.registerDuplicateError;
       case 500:
         return messages.serverError;
+      case 502:
+        return messages.serverIsNotAvailable;
       default:
         return modalInfo?.text;
     }

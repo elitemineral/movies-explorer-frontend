@@ -1,23 +1,32 @@
 import { mainApiBaseUrl } from './constants';
 
+export const promiseHandler = (promise) => {
+  return promise.then((res) =>
+    res.ok
+    ? res.json()
+    : Promise.reject({
+        text: res.statusText,
+        code: res.status,
+      })
+  )
+  .catch((err) => {
+    if (err.code) {
+      throw err;
+    } else {
+      return Promise.reject({
+        code: 502,
+      });
+    }
+  });
+}
+
 class Api {
   constructor(apiUrl) {
     this._apiUrl = apiUrl;
   }
 
-  _promiseHandler(promise) {
-    return promise.then((res) => {
-      res.ok
-      ? res.json()
-      : Promise.reject({
-          text: res.statusText,
-          code: res.status,
-        })
-    });
-  }
-
   register(name, email, password) {
-    return this._promiseHandler(
+    return promiseHandler(
       fetch(`${this._apiUrl}/signup`, {
         method: 'POST',
         headers: {
@@ -29,7 +38,7 @@ class Api {
   }
 
   authorize = (email, password) => {
-    return this._promiseHandler(
+    return promiseHandler(
       fetch(`${this._apiUrl}/signin`, {
         method: 'POST',
         credentials: 'include',
@@ -42,7 +51,7 @@ class Api {
   };
 
   logout = () => {
-    return this._promiseHandler(
+    return promiseHandler(
       fetch(`${this._apiUrl}/logout`, {
         method: 'GET',
         credentials: 'include',
@@ -51,7 +60,7 @@ class Api {
   };
 
   getUserInfo() {
-    return this._promiseHandler(
+    return promiseHandler(
       fetch(`${this._apiUrl}/users/me`, {
         method: 'GET',
         credentials: 'include',
@@ -60,7 +69,7 @@ class Api {
   }
 
   getSavedMovies() {
-    return this._promiseHandler(
+    return promiseHandler(
       fetch(`${this._apiUrl}/movies`, {
         method: 'GET',
         credentials: 'include',
@@ -69,7 +78,7 @@ class Api {
   }
 
   saveMovie(movie) {
-    return this._promiseHandler(
+    return promiseHandler(
       fetch(`${this._apiUrl}/movies`, {
         method: 'POST',
         credentials: 'include',
@@ -82,7 +91,7 @@ class Api {
   }
 
   deleteMovie(movieId) {
-    return this._promiseHandler(
+    return promiseHandler(
       fetch(`${this._apiUrl}/movies/${movieId}`, {
         method: 'DELETE',
         credentials: 'include',
