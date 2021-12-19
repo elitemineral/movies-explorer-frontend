@@ -2,16 +2,22 @@ import { useContext } from 'react';
 import { useCallback, useState } from 'react/cjs/react.development';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { messages } from '../../utils/constants';
-import { lsHelper } from '../../utils/helpers';
 import './SearchForm.css';
 
-export default function SearchForm() {
+export default function SearchForm(props) {
   const setModalInfo = useContext(CurrentUserContext).setModalInfo;
-  const handleSearchMovies = useContext(CurrentUserContext).handleSearchMovies;
   const isOffline = useContext(CurrentUserContext).isOffline;
 
-  const [query, setQuery] = useState(lsHelper.queryString());
-  const [isShortMovie, setIsShortMovie] = useState(lsHelper.isShortMovie());
+  const {
+    lsQuery,
+    lsIsShortMovie,
+    setQueryString,
+    handleSearchMovies,
+    lsSetIsShortMovie
+  } = props;
+
+  const [query, setQuery] = useState(lsQuery);
+  const [isShortMovie, setIsShortMovie] = useState(lsIsShortMovie);
 
   const handleQueryChange = (evt) => {
     setQuery(evt.target.value);
@@ -31,17 +37,16 @@ export default function SearchForm() {
         code: -1,
       });
 
-      lsHelper.removeQueryString();
       return;
     }
 
-    lsHelper.setQueryString(query);
+    setQueryString(query);
     handleSearchMovies(query, isShortMovie);
-  }, [setModalInfo, isOffline, query, handleSearchMovies, isShortMovie]);
+  }, [setModalInfo, isOffline, query, handleSearchMovies, isShortMovie, setQueryString]);
 
   const handleToggleShortMovie = () => {
     setIsShortMovie(prevValue => {
-      lsHelper.setIsShortMovie(!prevValue);
+      lsSetIsShortMovie(!prevValue);
       return !prevValue;
     });
   }

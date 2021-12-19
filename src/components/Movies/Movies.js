@@ -1,11 +1,11 @@
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import SearchForm from '../SearchForm/SearchForm';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import './Movies.css';
 import { lsHelper } from '../../utils/helpers';
+import MoviesSearchForm from '../MoviesSearchForm/MoviesSearchForm';
+import './Movies.css';
 
 export default function Movies() {
   const movies = useContext(CurrentUserContext).movies;
@@ -66,7 +66,7 @@ export default function Movies() {
     <>
       <Header />
       <main>
-        <SearchForm />
+        <MoviesSearchForm />
         <section className='movies'>
           {isEmptyResult ? (
             <p className='movies__not-found'>Ничего не найдено</p>

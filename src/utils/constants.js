@@ -18,9 +18,13 @@ export const moviesApiBaseUrl = 'https://api.nomoreparties.co';
 
 export const lsMoviesExplorerKeys = {
   moviesExplorerFoundMovies: 'moviesExplorerFoundMovies',
-  moviesExplorerQueryString: 'moviesExplorerQueryString',
+  moviesExplorerMoviesQueryString: 'moviesExplorerMoviesQueryString',
   moviesExplorerIsShortMovie: 'moviesExplorerIsShortMovie',
-  moviesExplorerCounter: 'moviesExplorerCounter',
+  moviesExplorerMoviesCounter: 'moviesExplorerMoviesCounter',
+
+  moviesExplorerFoundSavedMovies: 'moviesExplorerFoundSavedMovies',
+  moviesExplorerSavedMoviesQueryString: 'moviesExplorerSavedMoviesQueryString',
+  moviesExplorerIsShortSavedMovie: 'moviesExplorerIsShortSavedMovie',
 }
 
 export const messages = {

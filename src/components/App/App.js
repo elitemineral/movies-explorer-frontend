@@ -12,8 +12,8 @@ import PageNoFound from '../PageNoFound/PageNoFound';
 import Preloader from '../Preloader/Preloader';
 import ModalDialog from '../ModalDialog/ModalDialog';
 import mainApi from '../../utils/MainApi';
-import moviesApi from '../../utils/MoviesApi';
 import { lsHelper } from '../../utils/helpers';
+import MoviesApi from '../../utils/MoviesApi';
 
 const SHORT_MOVIE_DURATION = 40;
 
@@ -23,10 +23,12 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [movies, setMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
+  const [filteredSavedMovies, setFilteredSavedMovies] = useState([]);
+  const [isEmptyResult, setIsEmptyResult] = useState(false);
+  const [isEmptySavedResult, setIsEmptySavedResult] = useState(false);
   const [authStatus, setAuthStatus] = useState(authStatuses.undefined);
   const [isPreloaderOpen, setIsPreloaderOpen] = useState(false);
   const [modalInfo, setModalInfo] = useState(null);
-  const [isEmptyResult, setIsEmptyResult] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
 
   const onCloseModalDialog = useCallback(() => {
@@ -39,18 +41,28 @@ function App() {
     Promise.all(promises)
       .then(([userInfo, savedMovies]) => {
         setCurrentUser(userInfo);
-        setSavedMovies(savedMovies.map(savedMovie => {
+
+        const foundMovies = lsHelper.foundMovies();
+        if (foundMovies) {
+          setMovies(foundMovies);
+        }
+
+        const newSavedMovies = savedMovies.map(savedMovie => {
           return  {
             ...savedMovie,
             isSaved: true,
           }
-        }));
-        setAuthStatus(authStatuses.loggedIn);
+        });
+        setSavedMovies(newSavedMovies);
 
-        const foundFilms = lsHelper.foundFilms();
-        if (foundFilms) {
-          setMovies(foundFilms);
+        const foundSavedMovies = lsHelper.foundSavedMovies();
+        if (foundSavedMovies) {
+          setFilteredSavedMovies(foundSavedMovies);
+        } else {
+          setFilteredSavedMovies(newSavedMovies);
         }
+
+        setAuthStatus(authStatuses.loggedIn);
       })
       .catch(() => setAuthStatus(authStatuses.loggedOut));
   }, []);
@@ -106,38 +118,12 @@ function App() {
       .then(() => {
         setAuthStatus(authStatuses.loggedOut);
         nav(appRoutes.signIn);
-        lsHelper.removeMoviesSetting();
         setMovies([]);
+        lsHelper.removeMoviesSetting();
+        lsHelper.removeSavedMoviesSetting();
       })
       .catch(err => setModalInfo({ text: err.text, code: err.code }));
   }, [nav, setModalInfo, isOffline]);
-
-  const handleSearchMovies = useCallback((query, isShortMovie) => {
-    setIsPreloaderOpen(true);
-
-    moviesApi.getMovies()
-      .then(res => {
-        const movies = res
-          .filter(movie => movie.nameRU.toUpperCase()
-            .includes(query.toUpperCase()) &&
-              (isShortMovie ? movie.duration <= SHORT_MOVIE_DURATION : true)
-          )
-          .map(movie => ({
-            ...movie,
-            isLiked: savedMovies.some(savedMovie => savedMovie.movieId === movie.id),
-            image: `${moviesApiBaseUrl}${movie.image.url}`,
-            thumbnail: `${moviesApiBaseUrl}${movie.image.formats.thumbnail.url}`,
-            trailer: movie.trailerLink,
-          }));
-
-        setMovies(movies);
-        setIsEmptyResult(movies.length === 0);
-        lsHelper.setFoundFilms(movies);
-        lsHelper.removeMoviesCounter();
-      })
-      .catch(err => setModalInfo({ text: err.text, code: err.code }))
-      .finally(() => setIsPreloaderOpen(false));
-  }, [savedMovies, setModalInfo]);
 
   const handleMovieDelete = useCallback((movie) => {
     let id;
@@ -156,14 +142,27 @@ function App() {
         setMovies(prevMovies => {
           const newMovies = prevMovies.map(prevMovie => prevMovie.id !== movieId ? prevMovie : {...prevMovie, isLiked: false });
 
-          lsHelper.setFoundFilms(newMovies);
+          lsHelper.setFoundMovies(newMovies);
           return newMovies;
         });
 
-        setSavedMovies(prevSavedMovies => prevSavedMovies
-          .filter(savedMovie => savedMovie._id !== id));
+        const newSavedMovies = savedMovies.filter(savedMovie => savedMovie._id !== id);
+        setSavedMovies(newSavedMovies);
+
+        const query = lsHelper.savedMoviesQueryString() ?? '';
+        const isShortMovie = lsHelper.isShortSavedMovie() ?? false;
+
+        const newFilteredSavedMovies = newSavedMovies
+          .filter(movie => movie.nameRU.toUpperCase()
+            .includes(query.toUpperCase()) &&
+              (isShortMovie ? movie.duration <= SHORT_MOVIE_DURATION : true)
+          );
+
+        setFilteredSavedMovies(newFilteredSavedMovies);
       })
-      .catch(err => setModalInfo({ text: err.text, code: err.code }));
+      .catch(err => {
+        setModalInfo({ text: err.text, code: err.code })
+      });
   }, [savedMovies]);
 
   const handleMovieLike = useCallback((movie) => {
@@ -177,31 +176,90 @@ function App() {
           setMovies(prevMovies => {
             const newMovies = prevMovies.map(prevMovie => prevMovie.id !== movie.id ? prevMovie : {...prevMovie, isLiked: true });
 
-            lsHelper.setFoundFilms(newMovies);
+            lsHelper.setFoundMovies(newMovies);
             return newMovies;
           });
 
-          setSavedMovies(prevSavedMovies => [...prevSavedMovies, { ...savedMovie, isSaved: true }]);
+          const newSavedMovies = [...savedMovies, { ...savedMovie, isSaved: true }];
+          setSavedMovies(newSavedMovies);
+
+          const query = lsHelper.savedMoviesQueryString() ?? '';
+          const isShortMovie = lsHelper.isShortSavedMovie() ?? false;
+
+          const newFilteredSavedMovies = newSavedMovies
+            .filter(movie => movie.nameRU.toUpperCase()
+              .includes(query.toUpperCase()) &&
+                (isShortMovie ? movie.duration <= SHORT_MOVIE_DURATION : true)
+            );
+
+          setFilteredSavedMovies(newFilteredSavedMovies);
         })
         .catch(err => setModalInfo({  text: err.text, code: err.code  }));
     }
   }, [handleMovieDelete]);
 
+  const handleSearchMovies = useCallback((query, isShortMovie) => {
+    setIsPreloaderOpen(true);
+
+    MoviesApi.getMovies()
+      .then(res => {
+        const movies = res
+          .filter(movie => movie.nameRU.toUpperCase()
+            .includes(query.toUpperCase()) &&
+              (isShortMovie ? movie.duration <= SHORT_MOVIE_DURATION : true)
+          )
+          .map(movie => ({
+            ...movie,
+            isLiked: savedMovies.some(savedMovie => savedMovie.movieId === movie.id),
+            image: `${moviesApiBaseUrl}${movie.image.url}`,
+            thumbnail: `${moviesApiBaseUrl}${movie.image.formats.thumbnail.url}`,
+            trailer: movie.trailerLink,
+          }));
+
+        setMovies(movies);
+        setIsEmptyResult(movies.length === 0);
+        lsHelper.setFoundMovies(movies);
+        lsHelper.removeMoviesCounter();
+      })
+      .catch(err => setModalInfo({ text: err.text, code: err.code }))
+      .finally(() => setIsPreloaderOpen(false));
+  }, [savedMovies, setModalInfo]);
+
+  const handleSearchSavedMovies = useCallback((query, isShortMovie) => {
+    setIsPreloaderOpen(true);
+
+    const newFilteredSavedMovies = savedMovies
+      .filter(movie => movie.nameRU.toUpperCase()
+        .includes(query.toUpperCase()) &&
+          (isShortMovie ? movie.duration <= SHORT_MOVIE_DURATION : true)
+      );
+
+    setTimeout(() => {
+      setFilteredSavedMovies(newFilteredSavedMovies);
+      setIsEmptySavedResult(newFilteredSavedMovies.length === 0);
+      lsHelper.setFoundSavedMovies(newFilteredSavedMovies);
+      setIsPreloaderOpen(false);
+    }, 1000);
+  }, [savedMovies]);
+
   return (
     <CurrentUserContext.Provider
       value={{
         authStatus,
+        currentUser,
         movies,
-        savedMovies,
-        isEmptyResult,
+        filteredSavedMovies,
         handleRegister,
         handleAuthorize,
         handleLogout,
         setModalInfo,
         handleSearchMovies,
+        handleSearchSavedMovies,
         handleMovieLike,
         handleMovieDelete,
         isOffline,
+        isEmptyResult,
+        isEmptySavedResult,
       }}
     >
       <Routes>
