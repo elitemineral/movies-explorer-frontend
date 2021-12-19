@@ -196,7 +196,7 @@ function App() {
         })
         .catch(err => setModalInfo({  text: err.text, code: err.code  }));
     }
-  }, [handleMovieDelete]);
+  }, [handleMovieDelete, savedMovies]);
 
   const handleSearchMovies = useCallback((query, isShortMovie) => {
     setIsPreloaderOpen(true);
@@ -264,8 +264,24 @@ function App() {
     >
       <Routes>
         <Route path={appRoutes.root} element={<Main />} />
-        <Route path={appRoutes.signUp} element={<Register />} />
-        <Route path={appRoutes.signIn} element={<Login />} />
+
+        <Route
+          path={appRoutes.signUp}
+          element={
+            <DoNotRequireAuth>
+              <Register />
+            </DoNotRequireAuth>
+          }
+        />
+
+        <Route
+          path={appRoutes.signIn}
+          element={
+            <DoNotRequireAuth>
+              <Login />
+            </DoNotRequireAuth>
+          }
+        />
 
         <Route
           path={appRoutes.movies}
@@ -312,6 +328,19 @@ function App() {
       default:
         return (
           <Navigate to={appRoutes.root} />
+        );
+    }
+  }
+
+  function DoNotRequireAuth({ children }) {
+    switch (authStatus) {
+      case authStatuses.undefined:
+        return null;
+      case authStatuses.loggedOut:
+        return children;
+      default:
+        return (
+          <Navigate to={appRoutes.movies} />
         );
     }
   }
