@@ -1,13 +1,10 @@
 import { useCallback, useContext } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { messages } from '../../utils/constants';
 import './MoviesCard.css';
 
 export default function MoviesCard(props) {
-  const setModalInfo = useContext(CurrentUserContext).setModalInfo;
   const handleMovieLike = useContext(CurrentUserContext).handleMovieLike;
   const handleMovieDelete = useContext(CurrentUserContext).handleMovieDelete;
-  const isOffline = useContext(CurrentUserContext).isOffline;
 
   const movie = props.movie;
 
@@ -24,22 +21,12 @@ export default function MoviesCard(props) {
   }, [movie]);
 
   const handleBtnLikeClick = useCallback(() => {
-    if (isOffline) {
-      setModalInfo({ text: messages.noConnection, code: 200 });
-      return;
-    }
-
     handleMovieLike(movie);
-  }, [setModalInfo, isOffline, handleMovieLike, movie]);
+  }, [handleMovieLike, movie]);
 
   const handleBtnDeleteClick = useCallback(() => {
-    if (isOffline) {
-      setModalInfo({ text: messages.noConnection, code: 200 });
-      return;
-    }
-
     handleMovieDelete(movie);
-  }, [setModalInfo, isOffline, handleMovieDelete, movie]);
+  }, [handleMovieDelete, movie]);
 
   return (
     <li className='movies__item'>

@@ -68,6 +68,17 @@ class Api {
     );
   }
 
+  setUserInfo(name, email) {
+    return promiseHandler(fetch(`${this._apiUrl}/users/me`, {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, email })
+    }));
+  }
+
   getSavedMovies() {
     return promiseHandler(
       fetch(`${this._apiUrl}/movies`, {

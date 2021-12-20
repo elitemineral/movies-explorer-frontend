@@ -1,34 +1,54 @@
 import { Link } from 'react-router-dom';
-import { appRoutes, messages } from '../../utils/constants';
+import { appRoutes } from '../../utils/constants';
 import Header from '../Header/Header';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { useCallback, useContext } from 'react';
-import { useState } from 'react/cjs/react.development';
+import { useContext, useEffect, useState } from 'react';
+import { useForm, validators } from '../../utils/helpers';
 import './Login.css';
 
 export default function Login() {
-  const setModalInfo = useContext(CurrentUserContext).setModalInfo;
   const handleAuthorize = useContext(CurrentUserContext).handleAuthorize;
-  const isOffline = useContext(CurrentUserContext).isOffline;
 
-  const [loginData, setLoginData] = useState({});
-  const handleChange = (evt) => {
-    setLoginData({
-      ...loginData,
-      [evt.target.name]: evt.target.value
-    });
-  }
+  const { formValues, handleChange } = useForm();
 
-  const handleSubmit = useCallback((evt) => {
-    evt.preventDefault();
-
-    if (isOffline) {
-      setModalInfo({ text: messages.noConnection, code: 200 });
-      return;
+  const [errors, setErrors] = useState({
+    email: {
+      required: true,
+      isEmail: true,
+    },
+    password: {
+      required: true,
+      minLength: true,
     }
+  });
 
-    handleAuthorize(loginData);
-  }, [isOffline, handleAuthorize, loginData, setModalInfo]);
+  useEffect(() => {
+    const { email, password } = formValues;
+
+    const emailValidationResult = Object.keys(validators.email).map(errorKey => {
+      const errorResult = validators.email[errorKey](email);
+      return { [errorKey]: errorResult }
+    }).reduce((acc, err) => ({ ...acc, ...err }), {});
+
+    const passwordValidationResult = Object.keys(validators.password).map(errorKey => {
+      const errorResult = validators.password[errorKey](password);
+      return { [errorKey]: errorResult }
+    }).reduce((acc, err) => ({ ...acc, ...err }), {});
+
+    setErrors({
+      email: emailValidationResult,
+      password: passwordValidationResult,
+    });
+  }, [formValues]);
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    handleAuthorize(formValues);
+  };
+
+  const isEmailInvalid = !formValues.email || Object.values(errors.email).some(Boolean);
+  const isPasswordInvalid = !formValues.password || Object.values(errors.password).some(Boolean);
+  const isSubmitDisabled = isEmailInvalid || isPasswordInvalid;
 
   return (
     <>
@@ -49,11 +69,15 @@ export default function Login() {
                 className='form__input-auth'
                 name='email'
                 type='email'
-                value={loginData.email || ''}
+                value={formValues.email || ''}
                 onChange={handleChange}
-                required
               />
-              <span className='form__input-error'>Что-то пошло не так...</span>
+              <span className={`form__input-error${errors.email.required ? ' form__input-error_visible' : ''}`}>
+                Заполните это поле.
+              </span>
+              <span className={`form__input-error${errors.email.isEmail ? ' form__input-error_visible' : ''}`}>
+                Некорректный адрес электронной почты.
+              </span>
             </label>
             <label className='form__label-auth'>
               Пароль
@@ -61,16 +85,18 @@ export default function Login() {
                 className='form__input-auth'
                 name='password'
                 type='password'
-                minLength={8}
-                maxLength={15}
-                value={loginData.password || ''}
+                value={formValues.password || ''}
                 onChange={handleChange}
-                required
               />
-              <span className='form__input-error'>Что-то пошло не так...</span>
+              <span className={`form__input-error${errors.password.required ? ' form__input-error_visible' : ''}`}>
+                Заполните это поле.
+              </span>
+              <span className={`form__input-error${errors.password.minLength ? ' form__input-error_visible' : ''}`}>
+                Пароль должен быть не короче 8 символов.
+              </span>
             </label>
             <button
-              className='button form__button-auth form__button-auth_offset'
+              className={`button form__button-auth form__button-auth_offset${isSubmitDisabled ? ' button_disabled' : ''}`}
               type='submit'
             >
               Войти

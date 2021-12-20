@@ -85,6 +85,11 @@ function App() {
   }, [loadData]);
 
   const handleAuthorize = useCallback(({ email, password }) => {
+    if (isOffline) {
+      setModalInfo({ text: messages.noConnection, code: 200 });
+      return;
+    }
+
     mainApi
       .authorize(email, password)
       .then(() => {
@@ -93,20 +98,25 @@ function App() {
         nav(appRoutes.movies);
       })
       .catch(err => {
-        setModalInfo({ text: err.text, code: err.code })
+        setModalInfo({ code: err.code })
       });
-  }, [loadData, nav]);
+  }, [loadData, nav, isOffline]);
 
   const handleRegister = useCallback(({ name, email, password }) => {
+    if (isOffline) {
+      setModalInfo({ text: messages.noConnection, code: 200 });
+      return;
+    }
+
     mainApi
       .register(name, email, password)
       .then(() => {
         handleAuthorize({ email, password })
       })
       .catch(err => {
-        setModalInfo({ text: err.text, code: err.code })
+        setModalInfo({ code: err.code })
       });
-  }, [handleAuthorize]);
+  }, [handleAuthorize, setModalInfo, isOffline]);
 
   const handleLogout = useCallback(() => {
     if (isOffline) {
@@ -122,10 +132,29 @@ function App() {
         lsHelper.removeMoviesSetting();
         lsHelper.removeSavedMoviesSetting();
       })
-      .catch(err => setModalInfo({ text: err.text, code: err.code }));
-  }, [nav, setModalInfo, isOffline]);
+      .catch(err => setModalInfo({ code: err.code }));
+  }, [nav, isOffline]);
+
+  const handleUpdateUser = useCallback((name, email) => {
+    if (isOffline) {
+      setModalInfo({ text: messages.noConnection, code: 200 });
+      return;
+    }
+
+    mainApi.setUserInfo(name, email)
+    .then(userInfo => {
+      setCurrentUser(userInfo);
+      setModalInfo({ text: messages.successfulUpdate });
+    })
+    .catch(err => setModalInfo({ code: err.code }));
+  }, [isOffline]);
 
   const handleMovieDelete = useCallback((movie) => {
+    if (isOffline) {
+      setModalInfo({ text: messages.noConnection, code: 200 });
+      return;
+    }
+
     let id;
     let movieId;
 
@@ -161,11 +190,16 @@ function App() {
         setFilteredSavedMovies(newFilteredSavedMovies);
       })
       .catch(err => {
-        setModalInfo({ text: err.text, code: err.code })
+        setModalInfo({ code: err.code })
       });
-  }, [savedMovies]);
+  }, [savedMovies, isOffline]);
 
   const handleMovieLike = useCallback((movie) => {
+    if (isOffline) {
+      setModalInfo({ text: messages.noConnection, code: 200 });
+      return;
+    }
+
     if (movie.isLiked) {
       handleMovieDelete(movie);
     } else {
@@ -194,11 +228,16 @@ function App() {
 
           setFilteredSavedMovies(newFilteredSavedMovies);
         })
-        .catch(err => setModalInfo({  text: err.text, code: err.code  }));
+        .catch(err => setModalInfo({ code: err.code  }));
     }
-  }, [handleMovieDelete, savedMovies]);
+  }, [handleMovieDelete, savedMovies, isOffline]);
 
   const handleSearchMovies = useCallback((query, isShortMovie) => {
+    if (isOffline) {
+      setModalInfo({ text: messages.noConnection, code: 200 });
+      return;
+    }
+
     setIsPreloaderOpen(true);
 
     MoviesApi.getMovies()
@@ -221,25 +260,20 @@ function App() {
         lsHelper.setFoundMovies(movies);
         lsHelper.removeMoviesCounter();
       })
-      .catch(err => setModalInfo({ text: err.text, code: err.code }))
+      .catch(err => setModalInfo({ code: err.code }))
       .finally(() => setIsPreloaderOpen(false));
-  }, [savedMovies, setModalInfo]);
+  }, [savedMovies, setModalInfo, isOffline]);
 
   const handleSearchSavedMovies = useCallback((query, isShortMovie) => {
-    setIsPreloaderOpen(true);
-
     const newFilteredSavedMovies = savedMovies
       .filter(movie => movie.nameRU.toUpperCase()
         .includes(query.toUpperCase()) &&
           (isShortMovie ? movie.duration <= SHORT_MOVIE_DURATION : true)
       );
 
-    setTimeout(() => {
       setFilteredSavedMovies(newFilteredSavedMovies);
       setIsEmptySavedResult(newFilteredSavedMovies.length === 0);
       lsHelper.setFoundSavedMovies(newFilteredSavedMovies);
-      setIsPreloaderOpen(false);
-    }, 1000);
   }, [savedMovies]);
 
   return (
@@ -252,14 +286,14 @@ function App() {
         handleRegister,
         handleAuthorize,
         handleLogout,
-        setModalInfo,
+        handleUpdateUser,
         handleSearchMovies,
         handleSearchSavedMovies,
         handleMovieLike,
         handleMovieDelete,
-        isOffline,
         isEmptyResult,
         isEmptySavedResult,
+        setModalInfo,
       }}
     >
       <Routes>

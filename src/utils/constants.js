@@ -30,18 +30,12 @@ export const lsMoviesExplorerKeys = {
 export const messages = {
   noConnection: 'Во время запроса произошла ошибка. Возможно, проблема с соединением. Подождите немного и попробуйте ещё раз.',
   serverIsNotAvailable: 'Во время запроса произошла ошибка. Возможно, сервер недоступен. Подождите немного и попробуйте ещё раз.',
-
   serverError: 'Во время запроса произошла ошибка.',
-
   registerDuplicateError: 'Пользователь с таким email уже существует.',
-  registerError: 'При регистрации пользователя произошла ошибка.',
   registerSuccess: 'Вы успешно зарегистрировались!',
-
   authorizeIncorrectDataError: 'Вы ввели неправильный логин или пароль.',
-  authorizeError: 'При авторизации произошла ошибка.',
-
   noAccess: 'Нет доступа',
-
   badRequesError: 'Сервер не смог распознать запрос.',
   notFoundError: 'Запрашиваемый ресурс не найден',
+  successfulUpdate: 'Данные успешно обновлены.',
 }

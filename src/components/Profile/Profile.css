@@ -1,7 +1,6 @@
 .profile {
   background-color: #fafafa;
   padding: 70px 30px 40px;
-  height: calc(100vh - 74px);
   box-sizing: border-box;
 }
 
@@ -80,16 +79,9 @@
   color: #ee3465;
 }
 
-@media (min-width: 425px) {
-  .profile {
-    height: calc(100vh - 82px);
-  }
-}
-
 @media (min-width: 768px) {
   .profile {
     padding-top: 225px;
-    height: calc(100vh - 93px);
   }
 
   .form-profile {
@@ -104,6 +96,16 @@
     margin-top: 208px;
     font-size: 13px;
     line-height: 16px;
+  }
+
+  .form__button-edit_disabled {
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    color: #c2c2c2;
   }
 
   .form__button-exit-profile {

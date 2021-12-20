@@ -38,7 +38,7 @@ export default function ModalDialog(props) {
       <div className='modal'>
         <img
           className='modal__image'
-          src={modalInfo?.code === null ? imgInfo : imgError}
+          src={modalInfo?.code === undefined ? imgInfo : imgError}
           alt={'Изображение'}
         />
         <p className='modal__message'>{getText}</p>

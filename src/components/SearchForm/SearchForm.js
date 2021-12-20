@@ -1,12 +1,9 @@
-import { useContext } from 'react';
-import { useCallback, useState } from 'react/cjs/react.development';
+import { useContext, useState } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { messages } from '../../utils/constants';
 import './SearchForm.css';
 
 export default function SearchForm(props) {
   const setModalInfo = useContext(CurrentUserContext).setModalInfo;
-  const isOffline = useContext(CurrentUserContext).isOffline;
 
   const {
     lsQuery,
@@ -23,13 +20,8 @@ export default function SearchForm(props) {
     setQuery(evt.target.value);
   }
 
-  const handleSubmit = useCallback((evt) => {
+  const handleSubmit = (evt) => {
     evt.preventDefault();
-
-    if (isOffline) {
-      setModalInfo({ text: messages.noConnection, code: 200 });
-      return;
-    }
 
     if (!query) {
       setModalInfo({
@@ -42,11 +34,23 @@ export default function SearchForm(props) {
 
     setQueryString(query);
     handleSearchMovies(query, isShortMovie);
-  }, [setModalInfo, isOffline, query, handleSearchMovies, isShortMovie, setQueryString]);
+  }
 
   const handleToggleShortMovie = () => {
+    if (!query) {
+      setModalInfo({
+        text: 'Нужно ввести ключевое слово.',
+        code: -1,
+      });
+
+      return;
+    }
+
     setIsShortMovie(prevValue => {
       lsSetIsShortMovie(!prevValue);
+      setQueryString(query);
+
+      handleSearchMovies(query, !prevValue);
       return !prevValue;
     });
   }

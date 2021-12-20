@@ -1,4 +1,35 @@
+import { useState } from 'react';
 import { lsMoviesExplorerKeys } from './constants';
+import validator from 'validator';
+
+export function useForm(initialValues = {}) {
+  const [formValues, setFormValues] = useState(initialValues);
+
+  const handleChange = (event) => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+  return { formValues, handleChange, setFormValues };
+}
+
+export const validators = {
+  name: {
+    required: (value) => { return value === ''; },
+    minLength: (value) => { return value && value.length < 2; },
+    onlyAllowedSymbols: (value) => { return value && /[^а-яА-Яa-zA-Z- ]/.test(value); },
+  },
+  email: {
+    required: (value) => { return value === ''; },
+    isEmail: (value) => { return value && !validator.isEmail(value); },
+  },
+  password: {
+    required: (value) => { return value === ''; },
+    minLength: (value) => { return value && value.length < 8; },
+  },
+}
 
 export const lsHelper = {
   getItem: (key) => localStorage.getItem(key),
