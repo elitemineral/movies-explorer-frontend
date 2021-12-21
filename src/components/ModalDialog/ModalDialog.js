@@ -1,17 +1,47 @@
 import Popup from '../Popup/Popup';
+import { useMemo } from 'react';
+import imgError from '../../images/img-error.svg';
+import imgInfo from '../../images/img-info.svg';
+import { messages } from '../../utils/constants';
 import './ModalDialog.css';
 
 export default function ModalDialog(props) {
-  const { isOpen, onClose } = props;
+  const { modalInfo, onClose } = props;
+
+  const getText = useMemo(() => {
+    switch (modalInfo?.code) {
+      case 400:
+        return messages.badRequesError;
+      case 401:
+        return messages.authorizeIncorrectDataError;
+      case 403:
+       return messages.noAccess;
+      case 404:
+        return messages.notFoundError;
+      case 409:
+        return messages.registerDuplicateError;
+      case 500:
+        return messages.serverError;
+      case 502:
+        return messages.serverIsNotAvailable;
+      default:
+        return modalInfo?.text;
+    }
+  }, [modalInfo]);
 
   return (
     <Popup
-      isOpen={isOpen}
+      isOpen={modalInfo !== null}
       onClose={onClose}
       containerClassName='popup-modal-container'
     >
       <div className='modal'>
-        <p className='modal__message'>Вы успешно зарегистрировались!</p>
+        <img
+          className='modal__image'
+          src={modalInfo?.code === undefined ? imgInfo : imgError}
+          alt={'Изображение'}
+        />
+        <p className='modal__message'>{getText}</p>
         <button
           className='modal__button-close'
           type='button'

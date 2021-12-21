@@ -1,32 +1,15 @@
 import MoviesCard from '../MoviesCard/MoviesCard';
-import cardPoster from '../../images/card-poster.png';
-import ButtonMore from '../ButtonMore/ButtonMore';
-import { useLocation } from 'react-router';
-import { appRoutes } from '../../utils/constants';
 import './MoviesCardList.css';
 
-export default function MoviesCardList({ cards }) {
-  const location = useLocation();
-
+export default function MoviesCardList({ movies }) {
   return (
-    <section className='cards'>
-      <ul className='cards__list'>
-        {cards.map((card, idx) => (
+      <ul className='movies__list'>
+        {movies.map(movie => (
           <MoviesCard
-            key={idx}
-            name={card.name}
-            duration={card.duration}
-            thumbnail={cardPoster}
-            isLiked={card.isLiked}
-            isSaved={card.isSaved}
-            handleCardClick={() => {}}
-            handleLikeClick={() => {}}
-            handleDeleteClick={() => {}}
+            key={movie.id ?? movie._id}
+            movie={movie}
           />
         ))}
       </ul>
-
-      {location.pathname === appRoutes.movies && <ButtonMore />}
-    </section>
   );
 }

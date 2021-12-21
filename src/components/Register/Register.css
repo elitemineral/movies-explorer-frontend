@@ -3,7 +3,6 @@
   flex-direction: column;
   align-items: center;
   background-color: #fafafa;
-  height: calc(100vh - 112px);
 }
 
 .form-register {
@@ -48,7 +47,7 @@
 }
 
 .form__input-error_visible {
-  display: none;
+  display: block;
   margin-top: 10px;
 }
 
@@ -89,10 +88,6 @@
 }
 
 @media (min-width: 768px) {
-  .register {
-    height: calc(100vh - 300px);
-  }
-
   .form-register {
     width: 396px;
   }
@@ -123,11 +118,5 @@
   .register__link {
     font-size: 14px;
     line-height: 17px;
-  }
-}
-
-@media (min-width: 1280px) {
-  .register {
-    height: calc(100vh - 138px);
   }
 }
